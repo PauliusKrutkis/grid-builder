@@ -9,14 +9,14 @@ include(plugin_dir_path( __FILE__ ) . 'shortcode.php');
 function tetris_frontend_scripts() {
     // css
     wp_enqueue_style('gridstack-css', '//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.2.5/gridstack.min.css');
-	wp_enqueue_style('tetris-frontend-css', plugins_url('/assets/styles.less',__FILE__ ));
+	wp_enqueue_style('tetris-frontend-css', plugins_url('/frontend.less',__FILE__ ));
 
     // js
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('jquery-ui', '//code.jquery.com/ui/1.11.4/jquery-ui.min.js');
 	wp_enqueue_script('lodash-js', 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js');
     wp_enqueue_script('gridstack-js', '//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.2.5/gridstack.min.js');
-	wp_enqueue_script('tetris-frontend-js',  plugins_url('/assets/scripts.js',__FILE__ ));
+    wp_enqueue_script('tetris-js',  plugins_url('../tetris.js',__FILE__ ));
 }
 
-add_action( 'wp_enqueue_scripts', 'tetris_frontend_scripts' );
+add_action('wp_enqueue_scripts', 'tetris_frontend_scripts' );

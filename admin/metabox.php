@@ -4,7 +4,7 @@ function tetris_register_metabox() {
     global $post;
 
     add_meta_box( 'tetris-metabox', __( 'Tetris', 'tetris' ), 'tetris_display', 'tetris' );
-    
+
     if(get_post_status($post->ID) == 'publish')
         add_meta_box( 'tetris-metabox-side', __( 'Tetris shortcode', 'tetris' ), 'tetris_display_side', 'tetris', 'side' );
 }
@@ -20,12 +20,11 @@ function tetris_display($post) {
     ob_start();
 
     ?>
-
-    <div class="controls">
+    <div class="tetris-module">
         <button type="button" id="add-widget" name="button">Add widget</button>
+        <div class="grid-stack"></div>
+        <input type="hidden" class="saved-data" autocomplete="off" name="grid-data" value="<?php echo esc_attr($gridData); ?>"/>
     </div>
-    <div class="grid-stack"></div>
-    <input type="hidden" id="saved-data" name="grid-data" value="<?php echo esc_attr($gridData); ?>"/>
     <?php
 
     $echo = ob_get_clean();
@@ -38,7 +37,7 @@ function tetris_display_side($post) {
     ob_start();
 
     ?>
-        <input type="text" name="tetris_shortcode" value='[tetris id="<?php echo $post->ID ?>"]' readonly="readonly">
+        <input style="width: 100%" type="text" name="tetris_shortcode" value='[tetris id="<?php echo $post->ID ?>"]' readonly="readonly">
     <?php
 
     $echo = ob_get_clean();
