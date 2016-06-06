@@ -2,7 +2,8 @@ var tetris = (function($) {
 	'use strict';
 
     var $module, $addWidgetButton, $grid, $savedData, gridstack, gridOptions,
-	removeWidgetHTML, updateImageHTML, removeImageHTML, staticGrid, textBoxHTML,
+	removeWidgetHTML, updateImageHTML, removeImageHTML, staticGrid, textBoxInputHTML,
+	textBoxInputDataHTML,
 
     setVars = function(){
         $module = $('.tetris-module');
@@ -23,7 +24,8 @@ var tetris = (function($) {
         removeWidgetHTML = '<button type="button" class="remove-widget" name="button">Remove widget</button>';
         updateImageHTML = '<button type="button" class="update-image" name="button">Add image</button>';
         removeImageHTML = '<button type="button" class="remove-image hidden" name="button">Remove image</button>';
-		textBoxHTML = '<textarea name="content" class="widget-text-content"></textarea>';
+		textBoxInputHTML = '<textarea name="content" class="widget-text-content"></textarea>';
+		textBoxInputDataHTML = '<input type="hidden" name="text-content-data">';
     },
 
     // Bind events
@@ -67,7 +69,7 @@ var tetris = (function($) {
                 height: node.height,
 				id: $el.attr('data-gs-id'),
                 src: $el.attr('data-gs-src'),
-				content: $el.attr('data-gs-content'),
+				content: $el.find('input[name="text-content-data"]').val(),
             };
         });
 
@@ -87,15 +89,16 @@ var tetris = (function($) {
     },
 
     addContent = function(id, src, content){
-		if(!staticGrid) getWidget(id, true).append(removeWidgetHTML, updateImageHTML, removeImageHTML, textBoxHTML);
+		if(!staticGrid) getWidget(id, true).append(removeWidgetHTML, updateImageHTML, removeImageHTML, textBoxInputHTML, textBoxInputDataHTML);
         if(src) updateWidgetDataImage(id, src);
+
 		if(content){
-			getWidget(id).attr('data-gs-content', content);
+			getWidget(id).find('input[name="text-content-data"]').val(content);
 			getWidget(id).find('textarea').val(content);
 		}
-		if(staticGrid && content){
-			getWidget(id, true).wrapInner('<div class="text-content">'+content+'</div>');
-		}
+
+		if(staticGrid && content) getWidget(id, true).wrapInner('<div class="text-content">'+content+'</div>');
+
     },
 
     updateImage = function(){
@@ -139,7 +142,7 @@ var tetris = (function($) {
 
 	updateWidgetDataContent = function(){
 		var id = $(this).parent().parent().attr('data-gs-id');
-		getWidget(id).attr('data-gs-content', getWidget(id).find('textarea').val());
+		getWidget(id).find('input[name="text-content-data"]').val(getWidget(id).find('textarea').val());
 		saveGrid();
 	},
 

@@ -60,7 +60,7 @@ function save_tetris( $post_id ) {
     else
         if(!current_user_can('edit_post', $post_id)) return $post_id;
 
-    $gridData = sanitize_text_field( $_POST['grid-data'] );
+    $gridData = $_POST['grid-data'];
 
     update_post_meta($post_id, 'grid-data-key', $gridData);
 
