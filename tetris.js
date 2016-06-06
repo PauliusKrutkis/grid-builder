@@ -2,7 +2,7 @@ var tetris = (function($) {
 	'use strict';
 
     var $module, $addWidgetButton, $grid, $savedData, gridstack, gridOptions,
-	removeWidgetHTML, updateImageHTML, removeImageHTML, staticGrid,
+	removeWidgetHTML, updateImageHTML, removeImageHTML, staticGrid, textBoxHTML,
 
     setVars = function(){
         $module = $('.tetris-module');
@@ -23,6 +23,7 @@ var tetris = (function($) {
         removeWidgetHTML = '<button type="button" class="remove-widget" name="button">Remove widget</button>';
         updateImageHTML = '<button type="button" class="update-image" name="button">Add image</button>';
         removeImageHTML = '<button type="button" class="remove-image hidden" name="button">Remove image</button>';
+		textBoxHTML = '<textarea name="content" class="widget-text-content"></textarea>';
     },
 
     // Bind events
@@ -35,16 +36,17 @@ var tetris = (function($) {
         $module.delegate('.remove-widget', 'click', removeWidget);
         $module.delegate('.update-image', 'click', updateImage);
         $module.delegate('.remove-image', 'click', removeImage);
+		$module.delegate('.widget-text-content', 'blur', updateWidgetDataContent);
 
         $grid.on('change', saveGrid);
     },
 
     // Methods
 
-    addNewWidget = function(x, y, width, height, autoPosition, id, src){
+    addNewWidget = function(x, y, width, height, autoPosition, id, src, content){
         var $el = $($.parseHTML("<div><div class=\"grid-stack-item-content\"><div/>"));
         gridstack.addWidget($el, x, y, width, height, autoPosition, null, null, null, null, id);
-        addContent(id, src);
+        addContent(id, src, content);
         saveGrid();
     },
 
@@ -59,12 +61,13 @@ var tetris = (function($) {
             var node = $el.data('_gridstack_node');
 
             return{
-                id: $el.attr('data-gs-id'),
-                src: $el.attr('data-gs-src'),
                 x: node.x,
                 y: node.y,
                 width: node.width,
-                height: node.height
+                height: node.height,
+				id: $el.attr('data-gs-id'),
+                src: $el.attr('data-gs-src'),
+				content: $el.attr('data-gs-content'),
             };
         });
 
@@ -79,13 +82,20 @@ var tetris = (function($) {
         var items = GridStackUI.Utils.sort(data);
 
         _.each(items, function(node){
-            addNewWidget(node.x, node.y, node.width, node.height, false, node.id, node.src);
+            addNewWidget(node.x, node.y, node.width, node.height, false, node.id, node.src, node.content);
         });
     },
 
-    addContent = function(id, src){
-        if(!staticGrid) getWidget(id, true).append(removeWidgetHTML, updateImageHTML, removeImageHTML);
+    addContent = function(id, src, content){
+		if(!staticGrid) getWidget(id, true).append(removeWidgetHTML, updateImageHTML, removeImageHTML, textBoxHTML);
         if(src) updateWidgetDataImage(id, src);
+		if(content){
+			getWidget(id).attr('data-gs-content', content);
+			getWidget(id).find('textarea').val(content);
+		}
+		if(staticGrid && content){
+			getWidget(id, true).wrapInner('<div class="text-content">'+content+'</div>');
+		}
     },
 
     updateImage = function(){
@@ -126,6 +136,12 @@ var tetris = (function($) {
         getWidget(id, true).css('background-image', "url("+src+")");
         changeButtonStatus(id, src);
     },
+
+	updateWidgetDataContent = function(){
+		var id = $(this).parent().parent().attr('data-gs-id');
+		getWidget(id).attr('data-gs-content', getWidget(id).find('textarea').val());
+		saveGrid();
+	},
 
     changeButtonStatus = function(id, src){
         if(src){
