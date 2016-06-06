@@ -96,9 +96,6 @@ var tetris = (function($) {
 			getWidget(id).find('input[name="text-content-data"]').val(content);
 			getWidget(id).find('textarea').val(content);
 		}
-
-		if(staticGrid && content) getWidget(id, true).wrapInner('<div class="text-content">'+content+'</div>');
-
     },
 
     updateImage = function(){
@@ -180,6 +177,9 @@ var tetris = (function($) {
         if(!$module.length) return;
 
         bindEvents();
+
+		if(!$savedData.length) return;
+
         loadGrid();
 	};
 

@@ -19,10 +19,24 @@ function tetris_shortcode($atts){
 
 	?>
 		<?php while ( $query->have_posts() ) : $query->the_post(); ?>
-			<?php $gridData = get_post_meta(get_the_ID(), 'grid-data-key', true); ?>
+			<?php $gridData = json_decode(get_post_meta(get_the_ID(), 'grid-data-key', true)); ?>
 			<div class="tetris-module">
-		        <div class="grid-stack"></div>
-		        <input type="hidden" class="saved-data" autocomplete="off" name="grid-data" value="<?php echo esc_attr($gridData); ?>"/>
+		        <div class="grid-stack">
+					<?php foreach($gridData as $widget): ?>
+						<div class="grid-stack-item"
+							data-gs-x="<?php echo $widget->x ?>"
+							data-gs-y="<?php echo $widget->y ?>"
+							data-gs-width="<?php echo $widget->width ?>"
+							data-gs-height="<?php echo $widget->height ?>"
+							data-gs-id="<?php echo $widget->id ?>">
+					        <div class="grid-stack-item-content" <?php if(isset($widget->src)) echo 'style="background-image: url('.$widget->src.')"' ?>>
+					        	<?php
+									if($widget->content) echo '<div class="text-content">'.apply_filters('the_content', $widget->content).'</div>';
+								?>
+					        </div>
+					    </div>
+					<?php endforeach; ?>
+		        </div>
 		    </div>
 		<?php endwhile; ?>
 		<?php wp_reset_postdata(); ?>
@@ -32,4 +46,4 @@ function tetris_shortcode($atts){
 
 }
 
-add_shortcode( 'tetris', 'tetris_shortcode' );
+add_shortcode('tetris', 'tetris_shortcode');
