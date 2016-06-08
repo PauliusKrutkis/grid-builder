@@ -7,15 +7,17 @@
  * License: GPL2
  */
 
- // Less compiler
- include(plugin_dir_path( __FILE__ ) . 'vendor/wp-less/wp-less.php');
+// less compiler
+include(plugin_dir_path( __FILE__ ) . 'vendor/wp-less/wp-less.php');
 
-// Admin functions
+// admin functions
 include(plugin_dir_path( __FILE__ ) . 'admin/admin.php');
 
-// Frontend functions
+// frontend functions
 include(plugin_dir_path( __FILE__ ) . 'frontend/frontend.php');
 
-// TODO: make a dialog/modal for controll over individual blocks/widgets (maybe make a seperate module?)
+// TODO: remove fullcreen mode button from the tinyMCE editor
+// TODO: place the image controls inside the dialog
+// TODO: make an option to choose a background color for the block (colorpicker)
 // TODO: add an option for fullwidth grid
 // TODO: add an ability to nest grids

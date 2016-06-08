@@ -1,14 +1,16 @@
 var tetris = (function($) {
 	'use strict';
 
-    var $module, $addWidgetButton, $grid, $savedData, gridstack, gridOptions,
+    var $module, $addWidgetButton, $grid, $savedData, $dialog, $editor, gridstack, gridOptions,
 	removeWidgetHTML, updateImageHTML, removeImageHTML, staticGrid, textBoxInputHTML,
-	textBoxInputDataHTML,
+	textBoxInputDataHTML, editWidgetButtonHTML, dialogOptions, editorId, editorOpen,
 
     setVars = function(){
         $module = $('.tetris-module');
         $addWidgetButton = $($module.find('#add-widget').selector);
         staticGrid = ($addWidgetButton.length) ? false : true;
+ 		editorOpen = false;
+
         gridOptions = {
             cellHeight: 80,
             verticalMargin: 10,
@@ -18,14 +20,43 @@ var tetris = (function($) {
                 handles: 'e, se, s, sw, w'
             }
         };
+
+		dialogOptions = {
+			minWidth: 600,
+			minHeight: 600,
+			closeOnEscape: true,
+			dialogClass: "tetris-dialog",
+			buttons: {
+				"Save": function() {
+					$(this).dialog("close");
+					saveWidgetContent(getActiveWidgetDialogId());
+				},
+				Cancel: function() {
+					$(this).dialog("close");
+				}
+			},
+			open: function(){
+				if(!editorOpen){
+					loadEditor();
+					editorOpen = true;
+				}else{
+					setEditorContent();
+				}
+			},
+		};
+
+		$editor = $module.find('.tetris-editor');
         $grid = $module.find('.grid-stack').gridstack(gridOptions);
         gridstack = $grid.data('gridstack');
         $savedData = $module.find('.saved-data');
+		$dialog = $module.find('#tetris-dialog');
+		editorId = 'tetris_wp_editor';
         removeWidgetHTML = '<button type="button" class="remove-widget" name="button">Remove widget</button>';
         updateImageHTML = '<button type="button" class="update-image" name="button">Add image</button>';
         removeImageHTML = '<button type="button" class="remove-image hidden" name="button">Remove image</button>';
 		textBoxInputHTML = '<textarea name="content" class="widget-text-content"></textarea>';
 		textBoxInputDataHTML = '<input type="hidden" name="text-content-data">';
+		editWidgetButtonHTML = '<button type="button" class="edit-widget" name="button">Edit widget</button>';
     },
 
     // Bind events
@@ -39,6 +70,7 @@ var tetris = (function($) {
         $module.delegate('.update-image', 'click', updateImage);
         $module.delegate('.remove-image', 'click', removeImage);
 		$module.delegate('.widget-text-content', 'blur', updateWidgetDataContent);
+		$module.delegate('.edit-widget', 'click', openEditDialog);
 
         $grid.on('change', saveGrid);
     },
@@ -89,17 +121,13 @@ var tetris = (function($) {
     },
 
     addContent = function(id, src, content){
-		if(!staticGrid) getWidget(id, true).append(removeWidgetHTML, updateImageHTML, removeImageHTML, textBoxInputHTML, textBoxInputDataHTML);
+		if(!staticGrid) getWidget(id, true).append(removeWidgetHTML, updateImageHTML, removeImageHTML, editWidgetButtonHTML, textBoxInputDataHTML);
         if(src) updateWidgetDataImage(id, src);
-
-		if(content){
-			getWidget(id).find('input[name="text-content-data"]').val(content);
-			getWidget(id).find('textarea').val(content);
-		}
+		if(content) getWidget(id).find('input[name="text-content-data"]').val(content);
     },
 
     updateImage = function(){
-        var id = $(this).parent().parent().attr('data-gs-id');
+        var id = getWidgetId(this);
         var frame = wp.media({
             title: 'Select or Upload Media Of Your Chosen Persuasion',
             button:{
@@ -110,9 +138,7 @@ var tetris = (function($) {
 
         frame.on('select', function() {
             var attachment = frame.state().get('selection').first().toJSON();
-
             updateWidgetDataImage(id, attachment.url);
-
             saveGrid();
         });
 
@@ -120,7 +146,7 @@ var tetris = (function($) {
     },
 
     removeImage = function(){
-        var id = $(this).parent().parent().attr('data-gs-id');
+        var id = getWidgetId(this);
 
         getWidget(id).removeAttr('data-gs-src');
         getWidget(id, true).css('background-image', "none");
@@ -129,7 +155,67 @@ var tetris = (function($) {
         saveGrid();
     },
 
+	openEditDialog = function(){
+		var id = getWidgetId(this);
+		$dialog.attr('data-widget', id);
+		$dialog.dialog(dialogOptions);
+	},
+
+	loadEditor = function(id){
+
+		changeEditorLoadStatus();
+
+		$.ajax({
+			url : editor.ajax_url,
+			type : 'post',
+			data : {
+				action : 'load_wp_editor',
+			},
+			success:function(data){
+			    $editor.html(data.replace(/\\/g, ""));
+				setEditorContent();
+				changeEditorLoadStatus();
+			}
+		});
+
+		return false;
+	},
+
+	setEditorContent = function(){
+		var content = getWidget(getActiveWidgetDialogId()).find('input[name="text-content-data"]').val();
+		var editor = tinyMCE.get(editorId);
+
+		if(editor){
+			editor.setContent(content);
+		}else{
+			$('#'+editorId+'').val(content);
+		}
+	},
+
+	saveWidgetContent = function(id){
+		var content;
+		var editor = tinyMCE.get(editorId);
+
+		if(editor){
+			content = editor.getContent();
+		}else{
+			content = $('#'+editorId+'').val();
+		}
+
+		getWidget(id).find('input[name="text-content-data"]').val(content);
+		saveGrid();
+	},
+
     // Helpers
+
+	changeEditorLoadStatus = function(){
+		$editor.toggle();
+		$dialog.find('.spinner').toggleClass('active');
+	},
+
+	getActiveWidgetDialogId = function(){
+		return $dialog.attr('data-widget');
+	},
 
     updateWidgetDataImage = function(id, src){
         getWidget(id).attr('data-gs-src', src);
@@ -138,7 +224,7 @@ var tetris = (function($) {
     },
 
 	updateWidgetDataContent = function(){
-		var id = $(this).parent().parent().attr('data-gs-id');
+		var id = getWidgetId(this);
 		getWidget(id).find('input[name="text-content-data"]').val(getWidget(id).find('textarea').val());
 		saveGrid();
 	},
@@ -152,6 +238,10 @@ var tetris = (function($) {
 
         getWidget(id, true).children('.remove-image').toggleClass('hidden');
     },
+
+	getWidgetId = function(el){
+		return $(el).parent().parent().attr('data-gs-id');
+	},
 
     getWidget = function(id, content){
         if(content){
