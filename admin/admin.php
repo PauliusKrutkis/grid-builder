@@ -51,7 +51,13 @@ include(plugin_dir_path( __FILE__ ) . 'metabox.php');
 function load_wp_editor() {
 
 	ob_start();
-	wp_editor('', 'tetris_wp_editor', array('editor_height' => 400));
+
+	wp_editor('', 'tetris_wp_editor',
+		array(
+			'editor_height' => 400,
+		)
+	);
+
 	\_WP_Editors::enqueue_scripts();
 	print_footer_scripts();
 	\_WP_Editors::editor_js();
