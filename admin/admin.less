@@ -6,6 +6,7 @@
 // Helpers
 
 .background-cover{ -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background-position: center; }
+.border-box{ -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 .transform(@opt){ -webkit-transform: @opt; -moz-transform: @opt; -ms-transform: @opt; -o-transform: @opt; transform: @opt; }
 .box-shadow(@opt){ -webkit-box-shadow: @opt; -moz-box-shadow: @opt; box-shadow: @opt; }
 .tetris-button{ cursor: pointer; border-radius: 3px; font: 13px / 28px "Open Sans", sans-serif; padding: 0px 12px 2px; margin: 0; margin-right: 5px;
@@ -46,25 +47,32 @@
 
 // Dialog
 
+#tetris-dialog{ display: none; }
 .tetris-dialog{ z-index: 99999; .box-shadow(0px 0px 5px 0px rgba(0,0,0,0.75)); padding: 0; border-radius: 0; border: 0;
-
-    .ui-dialog-titlebar{ border: 0; border-radius: 0; background: none; background-color: #23282D;
-        .ui-dialog-title{ color: #eee; }
+    .ui-dialog-titlebar{ border: 0; border-radius: 0; background: none; background-color: #23282D; height: 60px; position: absolute;
+        left: 0; right: 0; top: 0; width: 100%; z-index: 1; .border-box;
+        .ui-dialog-title{ display: none; }
     }
-
     .ui-dialog-content {
         p{ margin: 0; }
     }
-
     .ui-dialog-buttonpane{ border-top: 1px solid #ddd; background-color: #f5f5f5; padding: 10px; }
 
     .ui-dialog-buttonset{
         button{ .tetris-button }
         button:first-of-type{ .tetris-button-primary; }
     }
-
-
     .spinner{ position: absolute; left: 50%; top: 50%; margin: 0; .transform(translate(-50%, -50%));
         &.active{ visibility: visible; }
     }
+}
+
+// Dialog Tabs
+
+#dialogTabs{ padding: 0; border: 0; border-radius: 0;
+    .ui-tabs-nav{ margin-bottom: 15px; background: none; border-radius: 0; padding: 0;
+        border: 0; z-index: 1; position: absolute; top: -53px; z-index: 1;
+    }
+    .ui-tabs-panel{ padding: 0; margin-top: 70px; }
+    .ui-tabs-anchor{ .box-shadow(none); }
 }

@@ -25,7 +25,18 @@ function tetris_display($post) {
         <div class="grid-stack"></div>
         <input type="hidden" class="saved-data" autocomplete="off" name="grid-data" value="<?php echo esc_attr($gridData); ?>"/>
         <div id="tetris-dialog" title="Edit widget">
-            <div class="tetris-editor"></div>
+            <div id="dialogTabs">
+                <ul>
+                    <li><a href="#editor">Editor</a></li>
+                    <li><a href="#options">Options</a></li>
+                </ul>
+                <div id="editor">
+                    <div class="tetris-editor"></div>
+                </div>
+                <div id="options">
+                    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+                </div>
+            </div>
             <div class="spinner"></div>
         </div>
     </div>
@@ -72,3 +83,25 @@ function save_tetris( $post_id ) {
 }
 
 add_action('save_post', 'save_tetris');
+
+// WP Editor load function
+
+function load_wp_editor() {
+
+	ob_start();
+
+	wp_editor('', 'tetris_wp_editor',
+		array(
+			'editor_height' => 400,
+		)
+	);
+
+	\_WP_Editors::enqueue_scripts();
+	print_footer_scripts();
+	\_WP_Editors::editor_js();
+	echo ob_get_clean();
+
+	die();
+}
+
+add_action( 'wp_ajax_load_wp_editor', 'load_wp_editor' );

@@ -1,17 +1,30 @@
 var tetris = (function($) {
 	'use strict';
 
-    var $module, $addWidgetButton, $grid, $savedData, $dialog, $editor, gridstack, gridOptions,
+    var $module, $addWidgetButton, $grid, $savedData, $dialog, $editor, $dialogTabs, gridstack, gridOptions,
 	removeWidgetHTML, updateImageHTML, removeImageHTML, staticGrid, textBoxInputHTML,
 	textBoxInputDataHTML, editWidgetButtonHTML, dialogOptions, editorId, editorOpen,
 
     setVars = function(){
-        $module = $('.tetris-module');
+		$module = $('.tetris-module');
         $addWidgetButton = $($module.find('#add-widget').selector);
-        staticGrid = ($addWidgetButton.length) ? false : true;
- 		editorOpen = false;
+		$editor = $module.find('.tetris-editor');
+        $grid = $module.find('.grid-stack').gridstack(gridOptions);
+        gridstack = $grid.data('gridstack');
+        $savedData = $module.find('.saved-data');
+		$dialog = $module.find('#tetris-dialog');
+		$dialogTabs = $module.find('#dialogTabs').tabs();
+		editorId = 'tetris_wp_editor';
+		editorOpen = false;
+		staticGrid = ($addWidgetButton.length) ? false : true;
+        removeWidgetHTML = '<button type="button" class="remove-widget" name="button">Remove widget</button>';
+        updateImageHTML = '<button type="button" class="update-image" name="button">Add image</button>';
+        removeImageHTML = '<button type="button" class="remove-image hidden" name="button">Remove image</button>';
+		textBoxInputHTML = '<textarea name="content" class="widget-text-content"></textarea>';
+		textBoxInputDataHTML = '<input type="hidden" name="text-content-data">';
+		editWidgetButtonHTML = '<button type="button" class="edit-widget" name="button">Edit widget</button>';
 
-        gridOptions = {
+		gridOptions = {
             cellHeight: 80,
             verticalMargin: 10,
             float: true,
@@ -44,19 +57,6 @@ var tetris = (function($) {
 				}
 			},
 		};
-
-		$editor = $module.find('.tetris-editor');
-        $grid = $module.find('.grid-stack').gridstack(gridOptions);
-        gridstack = $grid.data('gridstack');
-        $savedData = $module.find('.saved-data');
-		$dialog = $module.find('#tetris-dialog');
-		editorId = 'tetris_wp_editor';
-        removeWidgetHTML = '<button type="button" class="remove-widget" name="button">Remove widget</button>';
-        updateImageHTML = '<button type="button" class="update-image" name="button">Add image</button>';
-        removeImageHTML = '<button type="button" class="remove-image hidden" name="button">Remove image</button>';
-		textBoxInputHTML = '<textarea name="content" class="widget-text-content"></textarea>';
-		textBoxInputDataHTML = '<input type="hidden" name="text-content-data">';
-		editWidgetButtonHTML = '<button type="button" class="edit-widget" name="button">Edit widget</button>';
     },
 
     // Bind events

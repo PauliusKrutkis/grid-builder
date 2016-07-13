@@ -15,12 +15,3 @@ include(plugin_dir_path( __FILE__ ) . 'admin/admin.php');
 
 // frontend functions
 include(plugin_dir_path( __FILE__ ) . 'frontend/frontend.php');
-
-// TODO: place the image controls inside the dialog
-// TODO: make an option to choose a background color for the block (colorpicker)
-// TODO: add an option for fullwidth grid
-// TODO: add an ability to nest grids
-// TODO: make an option to lock a widget, so moving other children will not move that block
-// TODO: make a reorder button, functionality
-// TODO: make an option to set grid placeholder area background color
-// TODO: make a drag handler/button for each widget item
