@@ -31,8 +31,23 @@ function tetris_shortcode($atts){
 							data-gs-id="<?php echo $widget->id ?>">
 					        <div class="grid-stack-item-content" <?php if(isset($widget->src)) echo 'style="background-image: url('.$widget->src.')"' ?>>
 					        	<?php
-									if($widget->content) echo '<div class="text-content">'.apply_filters('the_content', $widget->content).'</div>';
-								?>
+									if($widget->content) echo '<div class="widget-content">'.apply_filters('the_content', $widget->content).'</div>';
+									if(isset($widget->childGrid)): ?>
+										<div class="grid-stack">
+										<?php foreach($widget->childGrid as $widget): ?>
+											<div class="grid-stack-item"
+												data-gs-x="<?php echo $widget->x ?>"
+												data-gs-y="<?php echo $widget->y ?>"
+												data-gs-width="<?php echo $widget->width ?>"
+												data-gs-height="<?php echo $widget->height ?>"
+												data-gs-id="<?php echo $widget->id ?>">
+												<div class="grid-stack-item-content" <?php if(isset($widget->src)) echo 'style="background-image: url('.$widget->src.')"' ?>>
+													<?php if($widget->content) echo '<div class="widget-content">'.apply_filters('the_content', $widget->content).'</div>'; ?>
+												</div>
+											</div>
+										<?php endforeach; ?>
+										</div>
+									<?php endif; ?>
 					        </div>
 					    </div>
 					<?php endforeach; ?>

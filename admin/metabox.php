@@ -23,7 +23,7 @@ function tetris_display($post) {
     <div class="tetris-module">
         <button type="button" id="add-widget" name="button">Add widget</button>
         <div class="grid-stack"></div>
-        <input type="hidden" class="saved-data" autocomplete="off" name="grid-data" value="<?php echo esc_attr($gridData); ?>"/>
+        <input type="text" class="saved-data" autocomplete="off" name="grid-data" value="<?php echo esc_attr($gridData); ?>"/>
         <div id="tetris-dialog" title="Edit widget">
             <div id="dialogTabs">
                 <ul>
