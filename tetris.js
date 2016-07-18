@@ -1,9 +1,9 @@
 var tetris = (function($) {
 	'use strict';
 
-    var $module, $addWidgetButton, $mainGrid, $savedData, $dialog, $editor, $dialogTabs, mainGridstack, gridOptions,
+    var $module, $addWidgetButton, $mainGrid, $savedData, mainGridstack, gridOptions,
 	removeWidgetHTML, updateImageHTML, removeImageHTML,textBoxInputDataHTML, editWidgetButtonHTML,
-	addNestedWidgetButtonHTML, staticGrid, dialogOptions, editorId, editorOpen,
+	addNestedWidgetButtonHTML, staticGrid,
 
     setVars = function(){
 		$module = $('.tetris-module');
@@ -20,45 +20,15 @@ var tetris = (function($) {
             }
         };
 
-		dialogOptions = {
-			minWidth: 600,
-			minHeight: 600,
-			closeOnEscape: true,
-			dialogClass: "tetris-dialog",
-			buttons: {
-				"Save": function() {
-					$(this).dialog("close");
-					saveWidgetContent(getActiveWidgetDialogId());
-				},
-				Cancel: function() {
-					$(this).dialog("close");
-				}
-			},
-			open: function(){
-				if(!editorOpen){
-					loadEditor();
-					editorOpen = true;
-				}else{
-					setEditorContent();
-				}
-			},
-		};
-
-		$editor = $module.find('.tetris-editor');
         $mainGrid = $module.find('.grid-stack').gridstack(gridOptions);
         mainGridstack = $mainGrid.data('gridstack');
         $savedData = $module.find('.saved-data');
-		$dialog = $module.find('#tetris-dialog');
-		$dialogTabs = $module.find('#dialogTabs').tabs();
-		editorId = 'tetris_wp_editor';
-		editorOpen = false;
-
         removeWidgetHTML = '<button type="button" class="remove-widget" name="button">Remove widget</button>';
         updateImageHTML = '<button type="button" class="update-image" name="button">Add image</button>';
         removeImageHTML = '<button type="button" class="remove-image hidden" name="button">Remove image</button>';
-		textBoxInputDataHTML = '<input type="hidden" name="widget-content">';
 		editWidgetButtonHTML = '<button type="button" class="edit-widget" name="button">Edit widget</button>';
 		addNestedWidgetButtonHTML = '<button type="button" class="add-nested-widget" name="button">Add widget</button>';
+		textBoxInputDataHTML = '<input type="hidden" name="widget-content">';
     },
 
     // Bind events
@@ -68,17 +38,17 @@ var tetris = (function($) {
             addNewWidget(null, null, 2, 2, true, guid(), null, null, mainGridstack);
         });
 
-        $module.delegate('.remove-widget', 'click', removeWidget);
-        $module.delegate('.update-image', 'click', updateImage);
-        $module.delegate('.remove-image', 'click', removeImage);
-		$module.delegate('.widget-text-content', 'blur', updateWidgetDataContent);
-		$module.delegate('.edit-widget', 'click', openEditDialog);
-
 		$module.delegate('.add-nested-widget', 'click', function(){
 			if($mainGrid.children().length) addNestedWidget(null, null, 2, 2, true, guid(), null, null, getWidgetId($(this)))
 		});
 
-        $mainGrid.on('change', saveGrid);
+		$module.delegate('.remove-widget', 'click', removeWidget);
+        $module.delegate('.update-image', 'click', updateImage);
+        $module.delegate('.remove-image', 'click', removeImage);
+		$module.delegate('.edit-widget', 'click', openEditDialog);
+
+        $mainGrid.on('change', saveGrid)
+		events.on('gridChanged', saveGrid)
     },
 
     // Methods
@@ -213,77 +183,16 @@ var tetris = (function($) {
 
 	openEditDialog = function(){
 		var id = getWidgetId(this);
-		$dialog.attr('data-widget', id);
-		$dialog.dialog(dialogOptions);
-	},
-
-	loadEditor = function(id){
-
-		changeEditorLoadStatus();
-
-		$.ajax({
-			url : editor.ajax_url,
-			type : 'post',
-			data : {
-				action : 'load_wp_editor',
-			},
-			success:function(data){
-			    $editor.html(data.replace(/\\/g, ""));
-				setEditorContent();
-				changeEditorLoadStatus();
-			}
-		});
-
-		return false;
-	},
-
-	setEditorContent = function(){
-		var content = getWidget(getActiveWidgetDialogId()).find('input[name="widget-content"]').val();
-		var editor = tinyMCE.get(editorId);
-
-		if(editor){
-			editor.setContent(content);
-		}else{
-			$('#'+editorId+'').val(content);
-		}
-	},
-
-	saveWidgetContent = function(id){
-		var content;
-		var editor = tinyMCE.get(editorId);
-
-		if(editor){
-			content = editor.getContent();
-		}else{
-			content = $('#'+editorId+'').val();
-		}
-
-		$('div[data-gs-id="'+id+'"] > .grid-stack-item-content > input[name="widget-content"]').val(content);
-		saveGrid();
+		events.emit('editWidget', id);
 	},
 
     // Helpers
-
-	changeEditorLoadStatus = function(){
-		$editor.toggle();
-		$dialog.find('.spinner').toggleClass('active');
-	},
-
-	getActiveWidgetDialogId = function(){
-		return $dialog.attr('data-widget');
-	},
 
     updateWidgetDataImage = function(id, src){
         getWidget(id).attr('data-gs-src', src);
         getWidget(id, true).css('background-image', "url("+src+")");
         changeButtonStatus(id, src);
     },
-
-	updateWidgetDataContent = function(){
-		var id = getWidgetId(this);
-		getWidget(id).find('input[name="widget-content"]').val(getWidget(id).find('textarea').val());
-		saveGrid();
-	},
 
     changeButtonStatus = function(id, src){
         if(src){
@@ -331,6 +240,7 @@ var tetris = (function($) {
 
 	return{
 		ready: ready,
+		getWidget: getWidget,
 	}
 
 })(jQuery);
