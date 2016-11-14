@@ -1,21 +1,27 @@
-import { Helper, gridMain } from './Helper'
+import Helper from './Helper'
 import Grid from './Grid'
+import { events } from './Events'
 
 export default class Block{
 
-    constructor(x, y, width, height, autoPosition, id, options){
-        let blockId = (id) ? id : Helper.guid()
-        let grid = gridMain.init()
-        let addBlockTemplate = `<button data-gs-id="${blockId}" type="button" class="btn add-block">Add</button>`
+    constructor(x, y, width, height, autoPosition, id, options, grid){
+        this.id = (id) ? id : Helper.guid()
+        this.block = Helper.getBlock(this.id)
+        this.options = options
 
-        if(Helper.getBlock(blockId).length){
-            grid = new Grid(null, blockId).init()
-            blockId = Helper.guid()
+        let addBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn add-block">Add</button>`
+
+        if(this.getGrid()){
+            this.grid = this.getGrid()
+            this.id = Helper.guid()
+            this.block = Helper.getBlock(this.id)
             addBlockTemplate = ''
+        }else{
+            this.grid = grid
         }
 
-        let editBlockTemplate = `<button data-gs-id="${blockId}" type="button" class="btn edit-block">Edit</button>`
-        let removeBlockTemplate = `<button data-gs-id="${blockId}" type="button" class="btn remove-block">Remove</button>`
+        let editBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn edit-block">Edit</button>`
+        let removeBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn remove-block">Remove</button>`
 
         const element = `
             <div>
@@ -28,13 +34,24 @@ export default class Block{
             </div>
         `
 
-        grid.addWidget(element, x, y, width, height, autoPosition, null, null, null, null, blockId)
-        this.addOptions(blockId, options)
+        this.grid.addWidget(element, x, y, width, height, autoPosition, null, null, null, null, this.id)
+        this.saveOptions()
     }
 
-    addOptions(id, options){
-        Helper.getBlock(id).find('.block-options').val(JSON.stringify(options, null, ''))
-        gridMain.saveBlocks()
+    saveOptions(){
+        this.block.find('.block-options').val(JSON.stringify(this.options, null, ''))
+        events.emit('save')
+    }
+
+    getGrid(block){
+        if(this.block.length){
+            if(this.block.find('.grid-stack').length){
+                return new Grid(this.block.find('.grid-stack').selector).getInstance()
+            }else{
+                let element = this.block.find('.grid-stack-item-content').append('<div class="grid-stack"></div>').find('.grid-stack').selector
+                return new Grid(element).getInstance()
+            }
+        }
     }
 
 }

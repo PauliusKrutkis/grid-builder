@@ -1,8 +1,10 @@
-import { Helper, modalClass, gridMain } from './Helper'
+import Helper from './Helper'
+import { events } from './Events'
 
 export default class Modal{
 
-    constructor(){
+    constructor(element){
+        this.element = $(element)
         this.options = {
             minWidth: 600,
 			minHeight: 600,
@@ -11,24 +13,29 @@ export default class Modal{
     }
 
     open(id){
-        modalClass.dialog(this.options)
+        this.element.dialog(this.options)
         this.id = id
     }
 
     addShortcode(shortcode){
+        this.addOption('shortcodes', shortcode)
+    }
+
+    addOption(param, value){
         let blockOptions = Helper.getBlock(this.id).find('.block-options')
         let options = {}
 
-        if(blockOptions.val()){
+        if(blockOptions.val() != '' && blockOptions.val() != 'null'){
+            console.log(false || true)
             options = JSON.parse(blockOptions.val())
-            if($.inArray(shortcode, options.shortcodes) > -1) return
-            options.shortcodes.push(shortcode)
+            if($.inArray(value, options[param]) > -1) return
+            options[param].push(value)
         }else{
-            options.shortcodes = [shortcode]
+            options[param] = [value]
         }
 
         blockOptions.val(JSON.stringify(options, null, ''))
-        gridMain.saveBlocks()
+        events.emit('save')
     }
 
 }

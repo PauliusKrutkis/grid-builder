@@ -1,11 +1,9 @@
-import { Helper, gridClass, gridData, gridMain } from './Helper'
+import Helper from './Helper'
 import Block from './Block'
 
 export default class Grid{
 
-    constructor(target, id){
-        this.target = target
-        this.id = id
+    constructor(element, data){
         this.options = {
             cellHeight: 80,
             verticalMargin: 10,
@@ -15,44 +13,40 @@ export default class Grid{
                 handles: 'e, se, s, sw, w'
             }
         }
+
+        this.element = $(element)
+        this.data = $(data)
+        this.grid = this.element.gridstack(this.options).data('gridstack')
     }
 
-    init(){
-        if(this.target) return this.$grid = this.target.gridstack(this.options).data('gridstack')
-        else if(this.id){
-            if(Helper.getBlock(this.id).find('.grid-stack').length)
-                return this.$grid = Helper.getBlock(this.id).
-                    find('.grid-stack')
-                    .gridstack(this.options)
-                    .data('gridstack')
-            else
-                return this.$grid = Helper.getBlock(this.id)
-                    .find('.grid-stack-item-content')
-                    .append('<div class="grid-stack"></div>')
-                    .find('.grid-stack')
-                    .gridstack(this.options)
-                    .data('gridstack')
-        }
+    getInstance(){
+        return this.grid
     }
 
-    removeBlock(id){
-        this.$grid.removeWidget(Helper.getBlock(id))
+    getElement(){
+        return this.element
     }
 
-    saveBlocks(){
-        const items = gridClass.children()
+    remove(id){
+        let block = Helper.getBlock(id)
+        let instance = block.parent().gridstack(this.options).data('gridstack')
+        instance.removeWidget(block)
+    }
+
+    save(){
+        const items = this.element.children()
 
         let data = _.map(items, (el) => {
             let $el = $(el)
             let node = $el.data('_gridstack_node')
             let nested = $el.find('.grid-stack').children()
-            let options = ($el.find('.block-options').val()) ? JSON.parse($el.find('.block-options').val()) : undefined
+            let options = ($el.find('.block-options').val()) ? JSON.parse($el.find('.block-options').val()) : null
 
             if(nested.length){
                 var data = _.map(nested, (el) => {
                     let $el = $(el)
                     let node = $el.data('_gridstack_node')
-                    let options = ($el.find('.block-options').val()) ? JSON.parse($el.find('.block-options').val()) : undefined
+                    let options = ($el.find('.block-options').val()) ? JSON.parse($el.find('.block-options').val()) : null
 
                     return{
                         x: node.x,
@@ -76,20 +70,19 @@ export default class Grid{
             }
         })
 
-        gridData.val(JSON.stringify(data, null, ''))
+        this.data.val(JSON.stringify(data, null, ''))
     }
 
-    loadBlocks(){
+    load(){
+        if(this.data.val() == '' || this.grid == null) return
 
-        if(gridData.val() == '' || gridMain.init() == null) return
+        this.grid.removeAll()
 
-        gridMain.init().removeAll()
-
-        let data = JSON.parse(gridData.val())
+        let data = JSON.parse(this.data.val())
         let items = GridStackUI.Utils.sort(data)
 
         _.each(items, (node) => {
-            new Block(node.x, node.y, node.width, node.height, false, node.id, node.options)
+            new Block(node.x, node.y, node.width, node.height, false, node.id, node.options, this.grid)
 
             if(node.nested){
                 let blockId = node.id
@@ -100,7 +93,5 @@ export default class Grid{
                 })
             }
         })
-
     }
-
 }

@@ -1,15 +1,9 @@
-$ = jQuery
-
-import Grid from './Grid'
 import Modal from './Modal'
 
-export const modalClass = $('.block-modal')
-export const modalMain = new Modal()
-export const gridClass = $('.grid-stack-main')
-export const gridData = $('.grid-data')
-export const gridMain = new Grid(gridClass)
+// export const modalClass = $('.block-modal')
+// export const modalMain = new Modal()
 
-export class Helper{
+export default class Helper{
 
     static guid(){
         return this.s4() + this.s4()

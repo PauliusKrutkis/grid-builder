@@ -3,7 +3,6 @@ var PROD = (process.env.NODE_ENV === 'production')
 
 module.exports = {
     entry: './assets/js/main.js',
-    devtool: 'source-map',
     output: {
         filename: './assets/js/build.js'
     },
