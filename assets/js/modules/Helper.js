@@ -1,8 +1,5 @@
 import Modal from './Modal'
 
-// export const modalClass = $('.block-modal')
-// export const modalMain = new Modal()
-
 export default class Helper{
 
     static guid(){

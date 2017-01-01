@@ -17,6 +17,7 @@ export default class Grid{
         this.element = $(element)
         this.data = $(data)
         this.grid = this.element.gridstack(this.options).data('gridstack')
+        this.props = []
     }
 
     getInstance(){
@@ -27,37 +28,45 @@ export default class Grid{
         return this.element
     }
 
+    getBlockParentId(id){
+        const block = Helper.getBlock(id)
+        const parentGrid = block.parent()
+
+        if(!parentGrid.hasClass('grid-stack-nested')) return null
+
+        return parentGrid.parent().parent().data('gs-id')
+    }
+
     remove(id){
-        let block = Helper.getBlock(id)
+        const block = Helper.getBlock(id)
         let instance = block.parent().gridstack(this.options).data('gridstack')
         instance.removeWidget(block)
     }
 
-    save(){
-        const items = this.element.children()
+    saveProp(args){
+        let params = {}
+        params[args.group] = args.shortcode
+        this.props[args.id] = params
 
-        let data = _.map(items, (el) => {
+        this.save()
+    }
+
+    saveAllProps(id, props){
+        this.props[id] = props
+    }
+
+    getProps(id){
+        return this.props[id]
+    }
+
+    save(){
+
+        const items = '.grid-stack-item'
+
+        let data = _.map($(items), (el) => {
             let $el = $(el)
             let node = $el.data('_gridstack_node')
-            let nested = $el.find('.grid-stack').children()
             let options = ($el.find('.block-options').val()) ? JSON.parse($el.find('.block-options').val()) : null
-
-            if(nested.length){
-                var data = _.map(nested, (el) => {
-                    let $el = $(el)
-                    let node = $el.data('_gridstack_node')
-                    let options = ($el.find('.block-options').val()) ? JSON.parse($el.find('.block-options').val()) : null
-
-                    return{
-                        x: node.x,
-                        y: node.y,
-                        width: node.width,
-                        height: node.height,
-                        id: node.id,
-                        options: options
-                    }
-                })
-            }
 
             return{
                 x: node.x,
@@ -65,8 +74,8 @@ export default class Grid{
                 width: node.width,
                 height: node.height,
                 id: node.id,
-                options: options,
-                nested: data
+                parent: this.getBlockParentId(node.id),
+                props: this.getProps(node.id)
             }
         })
 
@@ -79,19 +88,10 @@ export default class Grid{
         this.grid.removeAll()
 
         let data = JSON.parse(this.data.val())
-        let items = GridStackUI.Utils.sort(data)
 
-        _.each(items, (node) => {
-            new Block(node.x, node.y, node.width, node.height, false, node.id, node.options, this.grid)
-
-            if(node.nested){
-                let blockId = node.id
-                let items = GridStackUI.Utils.sort(node.nested)
-
-                _.each(items, (node) => {
-                    new Block(node.x, node.y, node.width, node.height, false, blockId, node.options)
-                })
-            }
+        _.each(data, (node) => {
+            new Block(node.x, node.y, node.width, node.height, false, node.id, node.options, this.grid, node.parent)
+            this.saveAllProps(node.id, node.props)
         })
     }
 }

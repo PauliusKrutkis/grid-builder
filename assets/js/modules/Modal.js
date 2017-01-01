@@ -18,24 +18,13 @@ export default class Modal{
     }
 
     addShortcode(shortcode){
-        this.addOption('shortcodes', shortcode)
-    }
-
-    addOption(param, value){
-        let blockOptions = Helper.getBlock(this.id).find('.block-options')
-        let options = {}
-
-        if(blockOptions.val() != '' && blockOptions.val() != 'null'){
-            console.log(false || true)
-            options = JSON.parse(blockOptions.val())
-            if($.inArray(value, options[param]) > -1) return
-            options[param].push(value)
-        }else{
-            options[param] = [value]
+        const args = {
+            id: this.id,
+            group: 'shortcode',
+            shortcode: shortcode
         }
 
-        blockOptions.val(JSON.stringify(options, null, ''))
-        events.emit('save')
+        events.emit('saveProp', args)
     }
 
 }

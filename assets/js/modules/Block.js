@@ -4,21 +4,21 @@ import { events } from './Events'
 
 export default class Block{
 
-    constructor(x, y, width, height, autoPosition, id, options, grid){
+    constructor(x, y, width, height, autoPosition, id, options, grid, parent){
         this.id = (id) ? id : Helper.guid()
-        this.block = Helper.getBlock(this.id)
-        this.options = options
 
         let addBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn add-block">Add</button>`
 
-        if(this.getGrid()){
+        if(parent){
+            this.block = Helper.getBlock(parent)
             this.grid = this.getGrid()
-            this.id = Helper.guid()
-            this.block = Helper.getBlock(this.id)
+
+            // disable nesting for more then 2 levels
             addBlockTemplate = ''
         }else{
             this.grid = grid
         }
+        console.log(this.id)
 
         let editBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn edit-block">Edit</button>`
         let removeBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn remove-block">Remove</button>`
@@ -35,15 +35,9 @@ export default class Block{
         `
 
         this.grid.addWidget(element, x, y, width, height, autoPosition, null, null, null, null, this.id)
-        this.saveOptions()
     }
 
-    saveOptions(){
-        this.block.find('.block-options').val(JSON.stringify(this.options, null, ''))
-        events.emit('save')
-    }
-
-    getGrid(block){
+    getGrid(){
         if(this.block.length){
             if(this.block.find('.grid-stack').length){
                 return new Grid(this.block.find('.grid-stack').selector).getInstance()
