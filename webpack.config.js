@@ -2,9 +2,9 @@ var webpack = require('webpack')
 var PROD = (process.env.NODE_ENV === 'production')
 
 module.exports = {
-    entry: './assets/js/main.js',
+    entry: './js/main.js',
     output: {
-        filename: './assets/js/build.js'
+        filename: './js/build.js'
     },
     module: {
         loaders: [

@@ -20,7 +20,7 @@ function main_meta($post) {
 
     $grid_data = get_post_meta($post->ID, 'gird_data', true);
 
-    include(plugin_dir_path( __FILE__ ) . 'template.php');
+    include(plugin_dir_path( __FILE__ ) . '../partials/grid.php');
 }
 
 function update_grid_data($post_id){

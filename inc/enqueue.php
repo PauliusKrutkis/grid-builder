@@ -1,9 +1,5 @@
 <?php
 
-add_action('wp-less_compiler_construct_pre', function($compiler){
-    $compiler->setFormatter('compressed');
-});
-
 function frontend_enqueue(){
 
     // jQuery-ui
@@ -21,8 +17,8 @@ function frontend_enqueue(){
 
     // custom
 
-    wp_enqueue_script('build', plugins_url('../assets/js/build.js',__FILE__ ), array('jquery'), null, true);
-    // wp_localize_script('tetris-js', 'wp', array('ajax' => admin_url('admin-ajax.php')));
+    wp_enqueue_script('build', plugins_url('../js/build.js',__FILE__ ), array('jquery'), null, true);
+
 
 }
 
@@ -46,11 +42,14 @@ function admin_enqueue() {
 
     wp_enqueue_script('lodash-js', '//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js');
 
-    // custom
+    // sass
 
-    wp_enqueue_style('less', plugins_url('../assets/css/main.less',__FILE__ ));
-    wp_enqueue_script('build', plugins_url('../assets/js/build.js',__FILE__ ), array('jquery'), null, true);
-    // wp_localize_script('tetris-js', 'wp', array('ajax' => admin_url('admin-ajax.php')));
+    wp_enqueue_style('styles', plugins_url('../css/main.css',__FILE__ ));
+
+    // scripts
+
+    wp_enqueue_script('build', plugins_url('../js/build.js',__FILE__ ), array('jquery'), null, true);
+    wp_localize_script('build', 'wp', array('ajax_url' => admin_url('admin-ajax.php')));
 
 }
 

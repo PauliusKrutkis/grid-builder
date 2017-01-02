@@ -1,0 +1,216 @@
+$i: !important
+
+$admin-bar-height: 32px
+
+// screen - xs
+$mobile-min-width: 420px
+$mobile-max-width: 640px
+
+// screen - sm
+$tablet-min-width: 767px
+
+// screen - md
+$tablet-max-width: 991px
+
+// screen - lg
+$desktop-min-width: 1199px
+
+// input
+
+$input-height: 36px
+$button-width: 100px
+$input-width: 300px
+$input-border-width: 1px
+$input-border-color: #ccc
+
+// color
+
+$primary: #b3d4fc
+
+// mixins
+
+=flex
+    display: -webkit-flex
+    display: -moz-flex
+    display: -ms-flex
+    display: -o-flex
+    display: flex
+
+=background-cover
+    -webkit-background-size: cover
+    -moz-background-size: cover
+    -o-background-size: cover
+    background-size: cover
+    background-position: center
+
+=clearfix
+    &
+        *zoom: 1
+    &:after, &:before
+        content: ''
+        display: table
+    &:after
+        clear: both
+
+=transform($opt)
+    -webkit-transform: $opt
+    -moz-transform: $opt
+    -ms-transform: $opt
+    -o-transform: $opt
+    transform: $opt
+
+=transition($opt)
+    -webkit-transition: $opt
+    -moz-transition: $opt
+    -o-transition: $opt
+    transition: $opt
+
+=box-sizing($opt)
+    -webkit-box-sizing: $opt
+    -moz-box-sizing: $opt
+    box-sizing: $opt
+
+=box-shadow($opt)
+    -webkit-box-shadow: $opt
+    -moz-box-shadow: $opt
+    box-shadow: $opt
+
+=hidden
+    display: none
+
+=vhidden
+    border: 0
+    clip: rect(0 0 0 0)
+    height: 1px
+    margin: -1px
+    overflow: hidden
+    position: absolute
+    padding: 0
+    width: 1px
+
+=valign
+    &:before
+        content: ''
+        display: inline-block
+        height: 100%
+        vertical-align: middle
+    & > *
+        display: inline-block
+        vertical-align: middle
+
+=menu
+    list-style-type: none
+    padding: 0
+    margin: 0
+
+=placeholder
+    input::-webkit-input-placeholder
+        @content
+    input:-moz-placeholder
+        @content
+    input::-moz-placeholder
+        @content
+    input:-ms-input-placeholder
+        @content
+
+=selector
+    ::-moz-selection
+        @content
+        text-shadow: none
+
+    ::selection
+        @content
+        text-shadow: none
+
+
+=sticky
+    position: fixed
+    top: 0
+    z-index: 1
+
+
+=breakpoint($point)
+    @media screen
+        @if $point == desktop-min
+            @media(max-width: #{$desktop-min-width})
+                @content
+        @if $point == tablet-max
+            @media(max-width: #{$tablet-max-width})
+                @content
+        @if $point == tablet-min
+            @media(max-width: #{$tablet-min-width})
+                @content
+        @if $point == mobile-max
+            @media(max-width: #{$mobile-max-width})
+                @content
+        @if $point == mobile-min
+            @media(max-width: #{$mobile-min-width})
+                @content
+
+=full-width
+    width: 100vw
+    margin-left: -50vw
+    left: 50%
+    position: relative
+
+=input
+    text-decoration: none
+    display: inline-block
+    height: $input-height
+    line-height: $input-height - $input-border-width
+    outline: 0
+    width: 100%
+    vertical-align: middle
+    background-color: #fff
+    border: $input-border-width solid $input-border-color
+    border-radius: 2px
+    padding: 0 $input-height / 2
+    +transition(all .15s ease-in-out)
+
+    +breakpoint(mobile-min)
+        max-width: 100%
+
+    &:hover
+        border-color: $primary
+    &:focus
+        border-color: $primary
+        +box-shadow(0 0 8px $primary)
+
+=button
+    +input
+    +transition(.2s ease-out)
+    +box-shadow(0 2px 5px 0 rgba(0,0,0,0.16))
+    max-width: $button-width
+    text-align: center
+    cursor: pointer
+    &:hover
+        +box-shadow(0 5px 11px 0 rgba(0,0,0,0.25))
+
+=input-checkbox
+    cursor: pointer
+    line-height: $input-height / 2
+    display: inline-block
+    position: relative
+    vertical-align: middle
+    margin-right: 10px
+    &:before
+        content: ''
+        display: inline-block
+        vertical-align: top
+        margin-right: 10px
+        height: $input-height / 2
+        width: $input-height / 2
+        border: $input-border-width solid $input-border-color
+    &:after
+        position: absolute
+        content: ''
+        top: 3px
+        left: 3px
+        height: $input-height / 2 - 6
+        width: $input-height / 2 - 6
+        background-color: $primary
+        +transform(scale(0))
+        +transition(transform .15s ease-in-out)
+    &:hover
+        &:before
+            border-color: $primary

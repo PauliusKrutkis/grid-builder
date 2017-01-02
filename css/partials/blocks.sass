@@ -1,0 +1,64 @@
+.block-modal
+    display: none
+    .shortcode-tree
+        height: 100%
+        width: 100%
+        +box-sizing(border-box)
+        position: absolute
+        left: 0
+        top: 0
+        font-size: 0
+        button
+            height: 100%
+            width: 50%
+            display: inline-block
+            +box-sizing(border-box)
+            font-size: 16px
+            // 1 item
+            &:first-child:nth-last-child(1)
+                width: 100%
+
+            // 2 items
+            &:first-child:nth-last-child(2),
+            &:first-child:nth-last-child(2) ~ button
+                width: 50%
+
+            // 3 & 4 items
+            &:first-child:nth-last-child(3),
+            &:first-child:nth-last-child(3) ~ button,
+            &:first-child:nth-last-child(4),
+            &:first-child:nth-last-child(4) ~ button
+                width: 50%
+                height: 50%
+
+            // TODO: 5 trough 9 items
+            // Maybe a for loop or something?
+            &:first-child:nth-last-child(5),
+            &:first-child:nth-last-child(5) ~ button
+                width: 33.3%
+                height: 33.3%
+
+#grid-main-metabox
+    .inside
+        background-color: #F5F5F5
+        padding: 12px
+        margin-top: 0
+        button
+            +button
+    .grid-stack
+        margin-left: -5px
+        margin-right: -5px
+    .grid-stack-placeholder > .placeholder-content
+        border: 0
+        background-color: #888
+    .grid-stack-item
+        .ui-resizable-sw
+            left: 5px
+        .ui-resizable-se
+            right: 5px
+    .grid-stack-item-content
+        background-color: #fff
+        +background-cover
+        left: 5px$i
+        right: 5px $i
+        +box-shadow(0 0 2px 0 rgba(0, 0, 0, 0.75))

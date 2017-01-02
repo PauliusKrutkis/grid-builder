@@ -7,11 +7,8 @@
  * License: MIT
  */
 
-include(plugin_dir_path( __FILE__ ) . 'vendor/wp-less/wp-less.php');
+include(plugin_dir_path( __FILE__ ) . 'inc/helper.php');
 include(plugin_dir_path( __FILE__ ) . 'inc/enqueue.php');
 include(plugin_dir_path( __FILE__ ) . 'inc/post_types.php');
 include(plugin_dir_path( __FILE__ ) . 'inc/metabox.php');
-include(plugin_dir_path( __FILE__ ) . 'inc/shortcode_collection.php');
-
-include(plugin_dir_path( __FILE__ ) . 'inc/shortcodes/background.php');
-include(plugin_dir_path( __FILE__ ) . 'inc/shortcodes/text.php');
+include(plugin_dir_path( __FILE__ ) . 'inc/shortcodes.php');
