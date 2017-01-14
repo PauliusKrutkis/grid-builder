@@ -21,41 +21,6 @@ function grid_shortcode($atts){
     $gridData = json_decode(get_post_meta($id, 'grid-data-key', true));
 	ob_start();
 
-    ?>
-    <div class="grid-stack">
-		<?php foreach($gridData as $block): ?>
-			<div class="grid-stack-item"
-				data-gs-x="<?php echo $block->x ?>"
-				data-gs-y="<?php echo $block->y ?>"
-				data-gs-width="<?php echo $block->width ?>"
-				data-gs-height="<?php echo $block->height ?>"
-				data-gs-id="<?php echo $block->id ?>">
-		        <div class="grid-stack-item-content" <?php if(isset($block->src)) echo 'style="background-image: url('.$block->src.')"' ?>>
-		        	<?php
-					if($block->content) echo '<div class="widget-content">'.apply_filters('the_content', $block->content).'</div>';
-					if(isset($block->nested)): ?>
-						<div class="grid-stack">
-						<?php foreach($block->nested as $block): ?>
-							<div class="grid-stack-item"
-								data-gs-x="<?php echo $block->x ?>"
-								data-gs-y="<?php echo $block->y ?>"
-								data-gs-width="<?php echo $block->width ?>"
-								data-gs-height="<?php echo $block->height ?>"
-								data-gs-id="<?php echo $block->id ?>">
-								<div class="grid-stack-item-content" <?php if(isset($block->src)) echo 'style="background-image: url('.$block->src.')"' ?>>
-									<?php if($block->content) echo '<div class="widget-content">'.apply_filters('the_content', $block->content).'</div>'; ?>
-								</div>
-							</div>
-						<?php endforeach; ?>
-						</div>
-					<?php endif; ?>
-		        </div>
-		    </div>
-		<?php endforeach; ?>
-    </div>
-
-    <?php
-
 	return ob_get_clean();
 }
 
@@ -73,28 +38,9 @@ Grid::map(array(
     'params' => array(
         array(
             'name' => 'content',
-            'type' => 'textfield',
+            'type' => 'textarea_html',
             'heading' => 'Content'
-        )
-    )
-));
-
-function shortcode_shortcode($atts){
-    return 'this is bg shortcode';
-}
-
-add_shortcode('background', 'background_shortcode');
-
-Grid::map(array(
-    'name' => 'Background',
-    'base' => 'background',
-	'class' => 'background-shortcode',
-    'params' => array(
-        array(
-            'name' => 'content',
-            'type' => 'textfield',
-            'heading' => 'Test'
-        )
+        ),
     )
 ));
 
@@ -116,6 +62,9 @@ function get_shortcode()
         switch ($param['type']) {
             case 'textfield':
                 include(plugin_dir_path( __FILE__ ) . '../partials/textfield.php');
+                break;
+            case 'textarea_html':
+                include(plugin_dir_path( __FILE__ ) . '../partials/textarea-html.php');
                 break;
 
             default:

@@ -1,5 +1,6 @@
 import Helper from './Helper'
 import Block from './Block'
+import { props } from './Props'
 
 export default class Grid{
 
@@ -17,7 +18,6 @@ export default class Grid{
         this.element = $(element)
         this.data = $(data)
         this.grid = this.element.gridstack(this.options).data('gridstack')
-        this.props = []
     }
 
     getInstance(){
@@ -43,22 +43,6 @@ export default class Grid{
         instance.removeWidget(block)
     }
 
-    saveProp(args){
-        let params = {}
-        params[args.group] = args.shortcode
-        this.props[args.id] = params
-
-        this.save()
-    }
-
-    saveAllProps(id, props){
-        this.props[id] = props
-    }
-
-    getProps(id){
-        return this.props[id]
-    }
-
     save(){
 
         const items = '.grid-stack-item'
@@ -75,7 +59,7 @@ export default class Grid{
                 height: node.height,
                 id: node.id,
                 parent: this.getBlockParentId(node.id),
-                props: this.getProps(node.id)
+                props: props.getProps(node.id)
             }
         })
 
@@ -91,7 +75,7 @@ export default class Grid{
 
         _.each(data, (node) => {
             new Block(node.x, node.y, node.width, node.height, false, node.id, node.options, this.grid, node.parent)
-            this.saveAllProps(node.id, node.props)
+            props.saveAllProps(node.id, node.props)
         })
     }
 }

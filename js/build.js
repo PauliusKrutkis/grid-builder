@@ -240,6 +240,8 @@ var _Block = __webpack_require__(2);
 
 var _Block2 = _interopRequireDefault(_Block);
 
+var _Props = __webpack_require__(6);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -261,7 +263,6 @@ var Grid = function () {
         this.element = $(element);
         this.data = $(data);
         this.grid = this.element.gridstack(this.options).data('gridstack');
-        this.props = [];
     }
 
     _createClass(Grid, [{
@@ -292,25 +293,6 @@ var Grid = function () {
             instance.removeWidget(block);
         }
     }, {
-        key: 'saveProp',
-        value: function saveProp(args) {
-            var params = {};
-            params[args.group] = args.shortcode;
-            this.props[args.id] = params;
-
-            this.save();
-        }
-    }, {
-        key: 'saveAllProps',
-        value: function saveAllProps(id, props) {
-            this.props[id] = props;
-        }
-    }, {
-        key: 'getProps',
-        value: function getProps(id) {
-            return this.props[id];
-        }
-    }, {
         key: 'save',
         value: function save() {
             var _this = this;
@@ -329,7 +311,7 @@ var Grid = function () {
                     height: node.height,
                     id: node.id,
                     parent: _this.getBlockParentId(node.id),
-                    props: _this.getProps(node.id)
+                    props: _Props.props.getProps(node.id)
                 };
             });
 
@@ -348,7 +330,7 @@ var Grid = function () {
 
             _.each(data, function (node) {
                 new _Block2.default(node.x, node.y, node.width, node.height, false, node.id, node.options, _this2.grid, node.parent);
-                _this2.saveAllProps(node.id, node.props);
+                _Props.props.saveAllProps(node.id, node.props);
             });
         }
     }]);
@@ -377,48 +359,86 @@ var _Helper2 = _interopRequireDefault(_Helper);
 
 var _Events = __webpack_require__(0);
 
+var _Props = __webpack_require__(6);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Modal = function () {
     function Modal(element) {
+        var _this = this;
+
         _classCallCheck(this, Modal);
 
+        this.editor = null;
         this.element = $(element);
         this.tree = this.element.find('.shortcode-tree');
         this.fields = this.element.find('.fields');
         this.options = {
             minWidth: 600,
             minHeight: 600,
-            closeOnEscape: true
+            closeOnEscape: true,
+            dialogClass: "block-modal-window",
+            buttons: {
+                // TODO localization
+                "Save": function Save() {
+                    return _this.save();
+                },
+                "Cancel": function Cancel() {
+                    return _this.close();
+                }
+            }
         };
     }
 
     _createClass(Modal, [{
+        key: 'save',
+        value: function save() {
+            this.close();
+        }
+    }, {
+        key: 'close',
+        value: function close() {
+            this.element.dialog('close');
+        }
+    }, {
+        key: 'showButtons',
+        value: function showButtons() {
+            this.element.parent().addClass('buttons-active');
+        }
+    }, {
         key: 'open',
         value: function open(id) {
             this.element.dialog(this.options);
             this.id = id;
+
+            // if id has props - empty the fields, call edit on that shortcode
+            // if it doesnt - empty the fields and show the tree.
+            console.log(_Props.props.getProps(this.id));
         }
     }, {
         key: 'addShortcode',
         value: function addShortcode(shortcode) {
+            this.showButtons();
+
             var args = {
                 id: this.id,
                 group: 'shortcode',
                 shortcode: shortcode
             };
 
-            _Events.events.emit('saveProp', args);
+            _Props.props.saveProp(args);
+
             this.edit(shortcode);
         }
     }, {
         key: 'edit',
         value: function edit(shortcode) {
-            var _this = this;
+            var _this2 = this;
 
             this.tree.hide();
+            this.editor = tinyMCEPreInit.mceInit.content;
             $.get({
                 url: wp.ajax_url,
                 data: {
@@ -426,7 +446,7 @@ var Modal = function () {
                     type: shortcode
                 },
                 success: function success(response) {
-                    return _this.fields.append(response);
+                    return _this2.fields.append(response);
                 }
             });
         }
@@ -492,6 +512,37 @@ $('body').delegate('.edit-block', 'click', function () {
 $('body').delegate('.shortcode-tree button', 'click', function () {
     modal.addShortcode($(this).data('shortcode'));
 });
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.props = undefined;
+
+var _Events = __webpack_require__(0);
+
+var props = exports.props = {
+    storage: {},
+
+    saveProp: function saveProp(args) {
+        var params = {};
+        params[args.group] = args.shortcode;
+        this.storage[args.id] = params;
+        _Events.events.emit('save');
+    },
+    saveAllProps: function saveAllProps(id, props) {
+        this.storage[id] = props;
+    },
+    getProps: function getProps(id) {
+        return this.storage[id];
+    }
+};
 
 /***/ }
 /******/ ]);
