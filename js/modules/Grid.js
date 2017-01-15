@@ -44,13 +44,11 @@ export default class Grid{
     }
 
     save(){
-
         const items = '.grid-stack-item'
 
         let data = _.map($(items), (el) => {
             let $el = $(el)
             let node = $el.data('_gridstack_node')
-            let options = ($el.find('.block-options').val()) ? JSON.parse($el.find('.block-options').val()) : null
 
             return{
                 x: node.x,
@@ -74,7 +72,7 @@ export default class Grid{
         let data = JSON.parse(this.data.val())
 
         _.each(data, (node) => {
-            new Block(node.x, node.y, node.width, node.height, false, node.id, node.options, this.grid, node.parent)
+            new Block(node.x, node.y, node.width, node.height, false, node.id, this.grid, node.parent)
             props.saveAllProps(node.id, node.props)
         })
     }

@@ -1,1 +1,1 @@
-<input type="text" name="<?php echo $name ?>" value="">
+<input type="text" class="argument" name="<?php echo $name ?>" value="">

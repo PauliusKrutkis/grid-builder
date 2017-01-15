@@ -37,9 +37,25 @@ Grid::map(array(
     'base' => 'text',
     'params' => array(
         array(
+            'name' => 'name',
+            'type' => 'textfield',
+            'heading' => 'Name'
+        ),
+        array(
+            'name' => 'surname',
+            'type' => 'textfield',
+            'heading' => 'Surname'
+        ),
+    )
+));
+Grid::map(array(
+    'name' => 'Lorem',
+    'base' => 'lorem',
+    'params' => array(
+        array(
             'name' => 'content',
             'type' => 'textarea_html',
-            'heading' => 'Content'
+            'heading' => 'Lorem'
         ),
     )
 ));

@@ -4,8 +4,8 @@ export const props = {
     storage: {},
 
     saveProp(args){
-        let params = {}
-        params[args.group] = args.shortcode
+        let params = (this.getProps(args.id)) ? this.getProps(args.id) : {}
+        params[args.group] = args.value
         this.storage[args.id] = params
         events.emit('save')
     },

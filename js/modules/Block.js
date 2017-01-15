@@ -4,7 +4,7 @@ import { events } from './Events'
 
 export default class Block{
 
-    constructor(x, y, width, height, autoPosition, id, options, grid, parent){
+    constructor(x, y, width, height, autoPosition, id, grid, parent){
         this.id = (id) ? id : Helper.guid()
 
         let addBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn add-block">Add</button>`

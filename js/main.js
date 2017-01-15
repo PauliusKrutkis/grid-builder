@@ -14,7 +14,7 @@ events.on('save', () => grid.save())
 events.on('saveProp', (args) => grid.saveProp(args))
 
 $('body').delegate('.add-block', 'click', function(){
-    new Block(null, null, 6, 3, true, null, null, grid.getInstance(), $(this).data('gs-id'))
+    new Block(null, null, 6, 3, true, null, grid.getInstance(), $(this).data('gs-id'))
 })
 
 $('body').delegate('.remove-block', 'click', function(){
