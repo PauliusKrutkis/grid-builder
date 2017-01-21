@@ -1,7 +1,7 @@
 <?php
 $editor_id =  'gb_mce';
 // TODO: remove full-screen
-wp_editor('', $editor_id, array('quicktags' => false));
+wp_editor(stripslashes($content), $editor_id, array('quicktags' => false));
 ?>
 
 <script type="text/javascript">

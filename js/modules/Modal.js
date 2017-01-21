@@ -38,6 +38,18 @@ export default class Modal{
             if(value != '') shortcodeArgs[name] = value
         })
 
+        // save wysiwyg content
+
+        if(this.fields.find('#'+wp.editor_id).length){
+            const blockContentArgs = {
+                id: this.id,
+                group: 'content',
+                value: tinymce.editors[wp.editor_id].getContent()
+            }
+
+            props.saveProp(blockContentArgs)
+        }
+
         // save shortcode args
 
         const blockShortcodeArgs = {
@@ -59,7 +71,7 @@ export default class Modal{
         if(blockProps){
             // if id has props - empty the fields, call edit on that shortcode
             this.empty()
-            this.edit(blockProps.shortcode, blockProps.shortcodeArgs)
+            this.edit(blockProps.shortcode, blockProps.shortcodeArgs, blockProps.content)
         }else{
             // if it doesnt - empty the fields and show the tree.
             this.empty()
@@ -79,7 +91,7 @@ export default class Modal{
         this.edit(shortcode, null)
     }
 
-    edit(shortcode, args){
+    edit(shortcode, args, content){
         this.shortcode = shortcode
         this.hideTree()
         $.get({
@@ -87,7 +99,8 @@ export default class Modal{
             data: {
                 action: 'get_shortcode',
                 type: shortcode,
-                args: args
+                args: args,
+                content: content
             },
             success: response => this.fields.append(response)
         })

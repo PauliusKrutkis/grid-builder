@@ -48,6 +48,17 @@ Grid::map(array(
             'type' => 'textfield',
             'heading' => 'Surname',
         ),
+        array(
+            'name' => 'content',
+            'type' => 'dropdown',
+            'heading' => 'Test',
+            // 'value' => array('lorem', 'test', 'ipsum')
+            'value' => array(
+                1 => 'lorem',
+                2 => 'test',
+                3 => 'ipsum'
+            )
+        ),
     )
 ));
 Grid::map(array(
@@ -82,15 +93,17 @@ function get_shortcode()
             $$paramName = (array_key_exists($paramName, $param)) ? $param[$paramName] : '';
         }
 
-        $value = (isset($args[$name])) ? $args[$name] : $value;
+        $saved = (isset($args[$name])) ? $args[$name] : 'empty';
 
-        echo "<label>$heading</label>";
         switch ($type) {
             case 'textfield':
                 include(plugin_dir_path( __FILE__ ) . '../partials/textfield.php');
                 break;
             case 'textarea_html':
                 include(plugin_dir_path( __FILE__ ) . '../partials/textarea-html.php');
+                break;
+            case 'dropdown':
+                include(plugin_dir_path( __FILE__ ) . '../partials/dropdown.php');
                 break;
 
             default:
