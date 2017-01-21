@@ -14,14 +14,4 @@ export default class Helper{
         return $(`div[data-gs-id="${id}"]`)
     }
 
-    static objArgsToString (obj) {
-        let str = ''
-        for (let p in obj) {
-            if (obj.hasOwnProperty(p)) {
-                str += p + '="' + obj[p].trim() + '" '
-            }
-        }
-        return str.trim()
-    }
-
 }

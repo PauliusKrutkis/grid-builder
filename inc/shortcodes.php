@@ -39,12 +39,14 @@ Grid::map(array(
         array(
             'name' => 'name',
             'type' => 'textfield',
-            'heading' => 'Name'
+            'heading' => 'Name',
+            'value' => 'testName',
+            'placeholder' => 'test placeholder'
         ),
         array(
             'name' => 'surname',
             'type' => 'textfield',
-            'heading' => 'Surname'
+            'heading' => 'Surname',
         ),
     )
 ));
@@ -62,7 +64,7 @@ Grid::map(array(
 
 function get_shortcode()
 {
-    $type = $_GET['type'];
+    extract($_GET);
 
     $shortcode = array_filter(Grid::get(), function($shortcode) use ($type){
         return $shortcode['base'] == $type ? true : false;
@@ -73,9 +75,17 @@ function get_shortcode()
     ob_start();
 
     foreach ($shortcode['params'] as $param){
-        echo '<label>'.$param['heading'].'</label>';
-        $name = $param['name'];
-        switch ($param['type']) {
+
+        $possibleParams = ['name', 'type', 'heading', 'value', 'placeholder'];
+
+        foreach ($possibleParams as $paramName) {
+            $$paramName = (array_key_exists($paramName, $param)) ? $param[$paramName] : '';
+        }
+
+        $value = (isset($args[$name])) ? $args[$name] : $value;
+
+        echo "<label>$heading</label>";
+        switch ($type) {
             case 'textfield':
                 include(plugin_dir_path( __FILE__ ) . '../partials/textfield.php');
                 break;

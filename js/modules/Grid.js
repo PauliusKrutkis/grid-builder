@@ -73,7 +73,7 @@ export default class Grid{
 
         _.each(data, (node) => {
             new Block(node.x, node.y, node.width, node.height, false, node.id, this.grid, node.parent)
-            props.saveAllProps(node.id, node.props)
+            props.storeProps(node.id, node.props)
         })
     }
 }

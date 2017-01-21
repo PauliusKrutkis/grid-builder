@@ -4,13 +4,15 @@ export const props = {
     storage: {},
 
     saveProp(args){
-        let params = (this.getProps(args.id)) ? this.getProps(args.id) : {}
+        const blockProps = this.getProps(args.id)
+        let params = (blockProps) ? blockProps : {}
+
         params[args.group] = args.value
         this.storage[args.id] = params
         events.emit('save')
     },
 
-    saveAllProps(id, props){
+    storeProps(id, props){
         this.storage[id] = props
     },
 
