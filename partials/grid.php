@@ -4,7 +4,11 @@
 
 <div class="grid-stack grid-stack-main"></div>
 
-<input type="text" class="grid-data" style="width: 100%" name="grid-data" value="<?php echo esc_attr(get_post_meta($post->ID, 'gird_data', true)); ?>">
+<input type="text"
+    class="grid-data"
+    style="width: 100%"
+    name="grid-data"
+    value="<?php echo esc_attr(get_post_meta($post->ID, 'gird_data', true)); ?>" />
 
 <?php include(plugin_dir_path( __FILE__ ) . '../partials/hidden-editor.php'); ?>
 

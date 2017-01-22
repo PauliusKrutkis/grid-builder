@@ -49,6 +49,18 @@ Grid::map(array(
             'heading' => 'Surname',
         ),
         array(
+            'name' => 'background',
+            'type' => 'colorpicker',
+            'heading' => 'BG',
+            'value' => '#000'
+        ),
+        array(
+            'name' => 'bgimg',
+            'type' => 'image',
+            'heading' => 'something',
+            'value' => 457
+        ),
+        array(
             'name' => 'content',
             'type' => 'dropdown',
             'heading' => 'Test',
@@ -104,6 +116,12 @@ function get_shortcode()
                 break;
             case 'dropdown':
                 include(plugin_dir_path( __FILE__ ) . '../partials/dropdown.php');
+                break;
+            case 'colorpicker':
+                include(plugin_dir_path( __FILE__ ) . '../partials/colorpicker.php');
+                break;
+            case 'image':
+                include(plugin_dir_path( __FILE__ ) . '../partials/image.php');
                 break;
 
             default:

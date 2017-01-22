@@ -17,8 +17,7 @@ function frontend_enqueue(){
 
     // custom
 
-    wp_enqueue_script('build', plugins_url('../js/build.js',__FILE__ ), array('jquery'), null, true);
-
+    wp_enqueue_script('build', plugins_url('../js/build.js', __FILE__ ), array('jquery'), null, true);
 
 }
 
@@ -27,6 +26,7 @@ function frontend_enqueue(){
 function admin_enqueue() {
 
     wp_enqueue_media();
+    wp_enqueue_style('wp-color-picker');
 
     // jQuery-ui
 
@@ -48,9 +48,9 @@ function admin_enqueue() {
 
     // scripts
 
-    wp_enqueue_script('build', plugins_url('../js/build.js',__FILE__ ), array('jquery'), null, true);
+    wp_enqueue_script('build', plugins_url('../js/build.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
 
-    // editor_id store in config
+    // TODO: editor_id store in config
     wp_localize_script('build', 'wp', array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'editor_id' => 'gb_mce'
