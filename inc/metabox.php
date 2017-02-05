@@ -16,10 +16,6 @@ function register_metabox(){
 add_action('add_meta_boxes', 'register_metabox');
 
 function main_meta($post) {
-    wp_nonce_field('grid_data', 'grid_data_nonce');
-
-    $grid_data = get_post_meta($post->ID, 'gird_data', true);
-
     include(plugin_dir_path( __FILE__ ) . '../partials/grid.php');
 }
 

@@ -1,17 +1,5 @@
 <?php
 
-class Grid{
-    static $shortcodes = array();
-
-    public static function map($new_shortcode){
-        self::$shortcodes[] = $new_shortcode;
-    }
-
-    public static function get(){
-        return self::$shortcodes;
-    }
-}
-
 function grid_shortcode($atts){
     extract(shortcode_atts(array(
         'id' => 0,
@@ -32,7 +20,7 @@ function text_shortcode($atts){
 
 add_shortcode('text', 'text_shortcode');
 
-Grid::map(array(
+$grid->map(array(
     'name' => 'Text',
     'base' => 'text',
     'params' => array(
@@ -73,7 +61,7 @@ Grid::map(array(
         ),
     )
 ));
-Grid::map(array(
+$grid->map(array(
     'name' => 'Lorem',
     'base' => 'lorem',
     'params' => array(

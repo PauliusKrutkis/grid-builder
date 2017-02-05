@@ -7,8 +7,11 @@
  * License: MIT
  */
 
-include(plugin_dir_path( __FILE__ ) . 'inc/helper.php');
-include(plugin_dir_path( __FILE__ ) . 'inc/enqueue.php');
+if (!defined('ABSPATH')) exit;
+
+include(plugin_dir_path( __FILE__ ) . 'Grid.php');
+$config = include(plugin_dir_path( __FILE__ ) . 'config.php');
+
+$grid = new Grid($config);
 include(plugin_dir_path( __FILE__ ) . 'inc/post_types.php');
-include(plugin_dir_path( __FILE__ ) . 'inc/metabox.php');
 include(plugin_dir_path( __FILE__ ) . 'inc/shortcodes.php');
