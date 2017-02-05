@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: "gbico";
+    src:url("fonts/gbico.eot");
+    src:url("fonts/gbico.eot?#iefix") format("embedded-opentype"),
+    url("fonts/gbico.woff") format("woff"),
+    url("fonts/gbico.ttf") format("truetype"),
+    url("fonts/gbico.svg#gbico") format("svg");
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+[data-icon]:before {
+    font-family: "gbico";
+    content: attr(data-icon);
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    vertical-align: middle;
+}
+
+[class^="ico-"]:before,
+[class*=" ico-"]:before {
+    font-family: "gbico";
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    vertical-align: middle;
+}
+
+.ico-trashcan:before {
+    content: "\61";
+}
+.ico-pen:before {
+    content: "\62";
+}
+.ico-file-add:before {
+    content: "\63";
+}
+.ico-window-delete:before {
+    content: "\64";
+}
+.ico-resize:before {
+    content: "\65";
+}

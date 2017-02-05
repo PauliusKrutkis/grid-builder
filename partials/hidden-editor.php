@@ -2,8 +2,8 @@
 
 <script type="text/javascript">
 jQuery(document).ready(function(e) {
-	if(typeof( editorSettings ) == 'undefined') {
-		editorSettings = JSON.stringify(tinyMCEPreInit);
-	}
+    if(typeof( editorSettings ) == 'undefined') {
+        editorSettings = JSON.stringify(tinyMCEPreInit);
+    }
 });
 </script>

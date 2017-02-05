@@ -1,13 +1,25 @@
 import Helper from './Helper'
 import Grid from './Grid'
 import { events } from './Events'
+import { props } from './Props'
 
 export default class Block{
 
     constructor(x, y, width, height, autoPosition, id, grid, parent){
         this.id = (id) ? id : Helper.guid()
 
-        let addBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn add-block">Add</button>`
+        let blockProps = props.getProps(this.id)
+        let hasShortcode = (blockProps) ? blockProps.shortcode : false
+
+        let addBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-file-add add-block"></a>`
+        let editBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-pen edit-block"></a>`
+        let removeBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-trashcan remove-block"></a>`
+        let removeShorcodeTemplate = `
+            <a href="javascript:void(0);"
+                data-gs-id="${this.id}"
+                class="ico-window-delete remove-shortcode ${(hasShortcode == '') ? 'hidden' : ''}">
+            </a>
+            `
 
         if(parent){
             this.block = Helper.getBlock(parent)
@@ -19,15 +31,15 @@ export default class Block{
             this.grid = grid
         }
 
-        let editBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn edit-block">Edit</button>`
-        let removeBlockTemplate = `<button data-gs-id="${this.id}" type="button" class="btn remove-block">Remove</button>`
-
         const element = `
             <div>
                 <div class="grid-stack-item-content">
-                    ${removeBlockTemplate}
-                    ${editBlockTemplate}
-                    ${addBlockTemplate}
+                    <div class="controls">
+                        ${removeShorcodeTemplate}
+                        ${addBlockTemplate}
+                        ${editBlockTemplate}
+                        ${removeBlockTemplate}
+                    </div>
                 </div>
             </div>
         `

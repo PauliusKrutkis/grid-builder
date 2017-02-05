@@ -10,9 +10,7 @@ export default class Grid{
             verticalMargin: 10,
             float: true,
             animate: true,
-            resizable: {
-                handles: 'e, se, s, sw, w'
-            }
+            alwaysShowResizeHandle: true,
         }
 
         this.element = $(element)
@@ -72,8 +70,8 @@ export default class Grid{
         let data = JSON.parse(this.data.val())
 
         _.each(data, (node) => {
-            new Block(node.x, node.y, node.width, node.height, false, node.id, this.grid, node.parent)
             props.storeProps(node.id, node.props)
+            new Block(node.x, node.y, node.width, node.height, false, node.id, this.grid, node.parent)
         })
     }
 }

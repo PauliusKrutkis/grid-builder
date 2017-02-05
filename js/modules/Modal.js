@@ -67,11 +67,12 @@ export default class Modal{
         this.id = id
 
         const blockProps = props.getProps(this.id)
+        const shortcode = (blockProps) ? blockProps.shortcode : false
 
-        if(blockProps){
+        if(shortcode){
             // if id has props - empty the fields, call edit on that shortcode
             this.empty()
-            this.edit(blockProps.shortcode, blockProps.shortcodeArgs, blockProps.content)
+            this.edit(shortcode, blockProps.shortcodeArgs, blockProps.content)
         }else{
             // if it doesnt - empty the fields and show the tree.
             this.empty()
@@ -80,6 +81,7 @@ export default class Modal{
 
     }
 
+    // called when clicked on one of the tree items (shortcodes)
     addShortcode(shortcode){
         const args = {
             id: this.id,
@@ -88,7 +90,8 @@ export default class Modal{
         }
 
         props.saveProp(args)
-        this.edit(shortcode, null)
+        Helper.toggleRemoveShortcode(this.id, true)
+        this.edit(shortcode)
     }
 
     edit(shortcode, args, content){

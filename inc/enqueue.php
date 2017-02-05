@@ -15,7 +15,7 @@ function frontend_enqueue(){
 
     wp_enqueue_script('lodash-js', '//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js');
 
-    // custom
+    // plugin
 
     wp_enqueue_script('build', plugins_url('../js/build.js', __FILE__ ), array('jquery'), null, true);
 
@@ -35,12 +35,8 @@ function admin_enqueue() {
 
     // gridstack
 
-    wp_enqueue_style('gridstack-css', '//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.2.5/gridstack.min.css');
-    wp_enqueue_script('gridstack-js', '//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.2.5/gridstack.min.js', array('jquery'), null, true);
-
-    // lodash
-
-    wp_enqueue_script('lodash-js', '//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js');
+    // wp_enqueue_style('gridstack-css', '//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.2.5/gridstack.min.css');
+    wp_enqueue_script('gridstack', plugins_url('../js/gridstack.all.js', __FILE__ ), array('jquery'), null, true);
 
     // sass
 

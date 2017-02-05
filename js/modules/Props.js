@@ -19,4 +19,10 @@ export const props = {
     getProps(id){
         return this.storage[id]
     },
+
+    removeProp(id, group){
+        const blockProps = this.getProps(id)
+        delete blockProps[group]
+        events.emit('save')
+    }
 }

@@ -1,14 +1,16 @@
 <!-- TODO: localization -->
 
-<button type="button" class="btn add-block" name="button"><?php _e('Add') ?></button>
+<button type="button" class="btn add-block"><span><?php _e('Add Block') ?></span></button>
 
-<div class="grid-stack grid-stack-main"></div>
+<div class="grid-stack grid-container grid-stack-main"></div>
 
-<input type="text"
+<input type="hidden"
     class="grid-data"
     style="width: 100%"
     name="grid-data"
-    value="<?php echo esc_attr(get_post_meta($post->ID, 'gird_data', true)); ?>" />
+    autocomplete="off"
+    value="<?php echo esc_attr(get_post_meta($post->ID, 'gird_data', true)); ?>"
+    />
 
 <?php include(plugin_dir_path( __FILE__ ) . '../partials/hidden-editor.php'); ?>
 

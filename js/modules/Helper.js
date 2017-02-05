@@ -1,4 +1,5 @@
 import Modal from './Modal'
+import { props } from './Props'
 
 export default class Helper{
 
@@ -12,6 +13,15 @@ export default class Helper{
 
     static getBlock(id){
         return $(`div[data-gs-id="${id}"]`)
+    }
+
+    static toggleRemoveShortcode(id, show){
+        const button = this.getBlock(id).find('.remove-shortcode')
+
+        if(show)
+            return button.removeClass('hidden')
+        else
+            return button.addClass('hidden')
     }
 
 }

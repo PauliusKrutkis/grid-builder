@@ -1,27 +1,27 @@
 <?php
 
 class Grid{
-	static $shortcodes = array();
+    static $shortcodes = array();
 
-	public static function map($new_shortcode){
-		self::$shortcodes[] = $new_shortcode;
-	}
+    public static function map($new_shortcode){
+        self::$shortcodes[] = $new_shortcode;
+    }
 
-	public static function get(){
-		return self::$shortcodes;
-	}
+    public static function get(){
+        return self::$shortcodes;
+    }
 }
 
 function grid_shortcode($atts){
-	extract(shortcode_atts(array(
-		'id' => 0,
-	), $atts));
+    extract(shortcode_atts(array(
+        'id' => 0,
+    ), $atts));
 
-	if(!$id) return;
+    if(!$id) return;
     $gridData = json_decode(get_post_meta($id, 'grid-data-key', true));
-	ob_start();
+    ob_start();
 
-	return ob_get_clean();
+    return ob_get_clean();
 }
 
 add_shortcode('grid', 'grid_shortcode');
@@ -110,31 +110,35 @@ function get_shortcode()
         switch ($type) {
             case 'textfield':
                 include(plugin_dir_path( __FILE__ ) . '../partials/textfield.php');
-                break;
+            break;
+
             case 'textarea_html':
                 include(plugin_dir_path( __FILE__ ) . '../partials/textarea-html.php');
-                break;
+            break;
+
             case 'dropdown':
                 include(plugin_dir_path( __FILE__ ) . '../partials/dropdown.php');
-                break;
+            break;
+
             case 'colorpicker':
                 include(plugin_dir_path( __FILE__ ) . '../partials/colorpicker.php');
-                break;
+            break;
+
             case 'image':
                 include(plugin_dir_path( __FILE__ ) . '../partials/image.php');
-                break;
+            break;
 
             default:
                 continue;
-                break;
+            break;
         }
     }
 
     $output = ob_get_clean();
 
     header("Content-type: application/json");
-	echo json_encode($output);
-	die;
+    echo json_encode($output);
+    die;
 }
 
 add_action('wp_ajax_get_shortcode', 'get_shortcode');

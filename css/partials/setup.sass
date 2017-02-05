@@ -25,9 +25,26 @@ $input-border-color: #ccc
 
 // color
 
-$primary: #b3d4fc
+$primary: #0085ba
 
 // mixins
+
+=icofont
+    font-family: "gbico"
+    content: attr(data-icon)
+    font-style: normal
+    font-weight: normal
+    font-variant: normal
+    text-transform: none
+    speak: none
+    line-height: 1
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+
+=ico
+    color: $primary
+    font-size: 17px
+    text-decoration: none
 
 =flex
     display: -webkit-flex
@@ -76,7 +93,7 @@ $primary: #b3d4fc
     box-shadow: $opt
 
 =hidden
-    display: none
+    display: none$i
 
 =vhidden
     border: 0
@@ -172,19 +189,21 @@ $primary: #b3d4fc
 
     &:hover
         border-color: $primary
-    &:focus
-        border-color: $primary
-        +box-shadow(0 0 8px $primary)
 
 =button
     +input
     +transition(.2s ease-out)
-    +box-shadow(0 2px 5px 0 rgba(0,0,0,0.16))
-    max-width: $button-width
     text-align: center
     cursor: pointer
+    span
+        display: block
+        +transition(transform .07s ease-in-out)
     &:hover
-        +box-shadow(0 5px 11px 0 rgba(0,0,0,0.25))
+        background-color: lighten($primary, 60%)
+    &:focus
+        background-color: lighten($primary, 55%)
+        span
+            +transform(translateX(2px))
 
 =input-checkbox
     cursor: pointer
@@ -214,3 +233,13 @@ $primary: #b3d4fc
     &:hover
         &:before
             border-color: $primary
+
+.hidden
+    +hidden
+
+.btn
+    +button
+
+[class^="ico-"],
+[class*=" ico-"]
+    +ico
