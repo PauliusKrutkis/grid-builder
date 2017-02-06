@@ -182,6 +182,9 @@ var Helper = function () {
         value: function getBlock(id) {
             return $('div[data-gs-id="' + id + '"]');
         }
+
+        // BUG: adding a shortcode for parent block also toggles for child blocks
+
     }, {
         key: 'toggleRemoveShortcode',
         value: function toggleRemoveShortcode(id, show) {
@@ -237,6 +240,7 @@ var Block = function () {
         var addBlockTemplate = '<a href="javascript:void(0);" data-gs-id="' + this.id + '" class="ico-file-add add-block"></a>';
         var editBlockTemplate = '<a href="javascript:void(0);" data-gs-id="' + this.id + '" class="ico-pen edit-block"></a>';
         var removeBlockTemplate = '<a href="javascript:void(0);" data-gs-id="' + this.id + '" class="ico-trashcan remove-block"></a>';
+
         var removeShorcodeTemplate = '\n            <a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                class="ico-window-delete remove-shortcode ' + (hasShortcode == '' ? 'hidden' : '') + '">\n            </a>\n            ';
 
         if (parent) {
@@ -598,7 +602,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 $ = jQuery;
 
-var grid = new _Grid2.default('.grid-stack-main', '.grid-data');
+var grid = new _Grid2.default('.grid-stack-main', 'input[name="' + wp.data_input + '"]');
 var modal = new _Modal2.default('.block-modal');
 
 grid.load();

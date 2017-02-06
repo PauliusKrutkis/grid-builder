@@ -44,6 +44,7 @@ $shortcodes = array(
     'lorem' => array(
         'name' => 'Lorem',
         'base' => 'lorem',
+        'class' => 'some-class',
         'params' => array(
             array(
                 'name' => 'content',

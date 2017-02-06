@@ -7,7 +7,7 @@ import Grid from './modules/Grid'
 import Modal from './modules/Modal'
 import Helper from './modules/Helper'
 
-const grid = new Grid('.grid-stack-main', '.grid-data')
+const grid = new Grid('.grid-stack-main', 'input[name="'+wp.data_input+'"]')
 const modal = new Modal('.block-modal')
 
 grid.load()

@@ -9,7 +9,7 @@
 
 if (!defined('ABSPATH')) exit;
 
-include(plugin_dir_path( __FILE__ ) . 'inc/Grid.php');
+include(plugin_dir_path( __FILE__ ) . 'grid.php');
 $config = include(plugin_dir_path( __FILE__ ) . 'config.php');
 $shortcodes = include(plugin_dir_path( __FILE__ ) . 'shortcodes.php');
 

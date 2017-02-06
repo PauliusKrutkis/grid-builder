@@ -6,24 +6,17 @@ class Grid
 
     protected $config;
 
+    protected $namespace;
+
     protected $postType;
 
     function __construct($config)
     {
         $this->config = $config;
 
+        $this->namespace = $this->config['namespace'];
         $this->postType = $this->config['post_type']['name'];
         $this->_setupActions();
-    }
-
-    public function map($shortcode)
-    {
-        self::$shortcodes[] = $shortcode;
-    }
-
-    public static function get()
-    {
-        return self::$shortcodes;
     }
 
     private function _setupActions()
@@ -33,6 +26,17 @@ class Grid
         add_action('add_meta_boxes', array($this, 'addMetaboxes'));
         add_action('save_post', array($this, 'saveGridData'));
         add_action('wp_ajax_get_shortcode', array($this, 'getShortcodeFields'));
+    }
+
+    private function get()
+    {
+        return self::$shortcodes;
+    }
+
+
+    public function map($shortcode)
+    {
+        self::$shortcodes[] = $shortcode;
     }
 
     public function getShortcodeFields()
@@ -59,7 +63,7 @@ class Grid
 
             if(!in_array($type, $this->config['field_types'])) return;
 
-            include(plugin_dir_path( __FILE__ ) . '../partials/fields/' . $type . '.php');
+            include(plugin_dir_path( __FILE__ ) . 'partials/fields/' . $type . '.php');
 
         }
 
@@ -72,11 +76,13 @@ class Grid
 
     public function saveGridData($postId)
     {
-        $nonce = $_POST['grid_data_nonce'];
+        $data = $this->config['data'];
+
+        $nonce = $_POST[$data.'_nonce'];
 
         if (!isset($nonce)) return $postId;
 
-        if (!wp_verify_nonce($nonce, 'grid_data')) return $postId;
+        if (!wp_verify_nonce($nonce, $data)) return $postId;
 
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $postId;
 
@@ -85,14 +91,14 @@ class Grid
         else
             if(!current_user_can('edit_post', $postId)) return $postId;
 
-        $grid_data = $_POST['grid-data'];
+        $gridData = $_POST[$data];
 
-        update_post_meta($postId, 'gird_data', $grid_data);
+        update_post_meta($postId, $data, $gridData);
     }
 
     public function addPostType()
     {
-        $label = __(ucfirst($this->postType), $this->config['text_domain']);
+        $label = __(ucfirst($this->postType), $this->namespace);
 
         register_post_type($this->postType,
             array(
@@ -123,21 +129,24 @@ class Grid
 
     public function adminEnqueue()
     {
+        // TODO: load jquery-ui from local
+        
         wp_enqueue_media();
 
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_style('jquery-ui-css', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css');
-        wp_enqueue_style('styles', plugins_url('../css/main.css',__FILE__ ));
+        wp_enqueue_style('styles', plugins_url('css/main.css',__FILE__ ));
 
         wp_enqueue_script('jquery-ui', '//code.jquery.com/ui/1.11.4/jquery-ui.min.js', array('jquery'), null, true);
-        wp_enqueue_script('gridstack', plugins_url('../js/gridstack.all.js', __FILE__ ), array('jquery'), null, true);
-        wp_enqueue_script('build', plugins_url('../js/build.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
+        wp_enqueue_script('gridstack', plugins_url('js/gridstack.all.js', __FILE__ ), array('jquery'), null, true);
+        wp_enqueue_script('build', plugins_url('js/build.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
+
         // TODO: editor_id store in config
-        
+
         wp_localize_script('build', 'wp', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'editor_id' => 'gb_mce'
+            'editor_id' => $this->config['mce'],
+            'data_input' => $this->config['data']
         ));
     }
-
 }

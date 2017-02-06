@@ -15,6 +15,8 @@ export default class Helper{
         return $(`div[data-gs-id="${id}"]`)
     }
 
+    // BUG: adding a shortcode for parent block also toggles for child blocks
+
     static toggleRemoveShortcode(id, show){
         const button = this.getBlock(id).find('.remove-shortcode')
 

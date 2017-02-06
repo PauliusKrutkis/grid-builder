@@ -14,6 +14,7 @@ export default class Block{
         let addBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-file-add add-block"></a>`
         let editBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-pen edit-block"></a>`
         let removeBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-trashcan remove-block"></a>`
+
         let removeShorcodeTemplate = `
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
