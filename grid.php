@@ -10,10 +10,13 @@ class Grid
 
     protected $postType;
 
+    protected $playground;
+
     function __construct($config)
     {
         $this->config = $config;
 
+        $this->playground = $this->config['playground'];
         $this->namespace = $this->config['namespace'];
         $this->postType = $this->config['post_type']['name'];
         $this->_setupActions();
@@ -28,11 +31,23 @@ class Grid
         add_action('wp_ajax_get_shortcode', array($this, 'getShortcodeFields'));
     }
 
+    private function _getJsLocalization()
+    {
+        $jsLocalization = $this->config['js_localization'];
+
+        $localization = [];
+
+        foreach ($jsLocalization as $key => $string) {
+            $localization[$key] = __($string, $this->namespace);
+        }
+
+        return $localization;
+    }
+
     private function get()
     {
         return self::$shortcodes;
     }
-
 
     public function map($shortcode)
     {
@@ -76,7 +91,7 @@ class Grid
 
     public function saveGridData($postId)
     {
-        $data = $this->config['data'];
+        $data = $this->playground['data'];
 
         $nonce = $_POST[$data.'_nonce'];
 
@@ -122,7 +137,7 @@ class Grid
         foreach ($metaboxes as $name => $box) {
             $box_key = strtolower(str_replace(' ', '-', $name));
             add_meta_box($box_key, $name, function() use ($box){
-                return include(plugin_dir_path( __FILE__ ) . $box['template']);
+                return include(plugin_dir_path( __FILE__ ) . $box['template'] . '.php');
             }, $this->postType, $box['position']);
         }
     }
@@ -130,7 +145,7 @@ class Grid
     public function adminEnqueue()
     {
         // TODO: load jquery-ui from local
-        
+
         wp_enqueue_media();
 
         wp_enqueue_style('wp-color-picker');
@@ -141,12 +156,11 @@ class Grid
         wp_enqueue_script('gridstack', plugins_url('js/gridstack.all.js', __FILE__ ), array('jquery'), null, true);
         wp_enqueue_script('build', plugins_url('js/build.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
 
-        // TODO: editor_id store in config
-
         wp_localize_script('build', 'wp', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'editor_id' => $this->config['mce'],
-            'data_input' => $this->config['data']
+            'playground' => $this->playground,
+            'strings' => $this->_getJsLocalization()
         ));
     }
+
 }

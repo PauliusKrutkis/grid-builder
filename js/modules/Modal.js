@@ -1,4 +1,3 @@
-import Helper from './Helper'
 import { events } from './Events'
 import { props } from './Props'
 
@@ -15,11 +14,16 @@ export default class Modal{
             minHeight: 600,
             closeOnEscape: true,
             dialogClass: "block-modal-window",
-            buttons: {
-                // TODO localization
-                "Save": () => this.save(),
-                "Cancel": () => this.close()
-            }
+            buttons: [
+                {
+                    text: wp.strings.save,
+                    click: () => this.save()
+                },
+                {
+                    text: wp.strings.cancel,
+                    click: () => this.close()
+                }
+            ]
         }
     }
 
@@ -90,7 +94,7 @@ export default class Modal{
         }
 
         props.saveProp(args)
-        Helper.toggleRemoveShortcode(this.id, true)
+        events.emit('shortcode-selected', this.id)
         this.edit(shortcode)
     }
 

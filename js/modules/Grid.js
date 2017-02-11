@@ -1,4 +1,3 @@
-import Helper from './Helper'
 import Block from './Block'
 import { props } from './Props'
 
@@ -27,7 +26,7 @@ export default class Grid{
     }
 
     getBlockParentId(id){
-        const block = Helper.getBlock(id)
+        let block = this.getBlock(id)
         const parentGrid = block.parent()
 
         if(!parentGrid.hasClass('grid-stack-nested')) return null
@@ -36,7 +35,7 @@ export default class Grid{
     }
 
     remove(id){
-        const block = Helper.getBlock(id)
+        const block = this.getBlock(id)
         let instance = block.parent().gridstack(this.options).data('gridstack')
         instance.removeWidget(block)
     }
@@ -73,5 +72,9 @@ export default class Grid{
             props.storeProps(node.id, node.props)
             new Block(node.x, node.y, node.width, node.height, false, node.id, this.grid, node.parent)
         })
+    }
+
+    getBlock(id){
+        return $(`div[data-gs-id="${id}"]`)
     }
 }

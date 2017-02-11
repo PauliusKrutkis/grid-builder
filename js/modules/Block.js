@@ -1,62 +1,97 @@
-import Helper from './Helper'
 import Grid from './Grid'
-import { events } from './Events'
 import { props } from './Props'
 
 export default class Block{
 
     constructor(x, y, width, height, autoPosition, id, grid, parent){
-        this.id = (id) ? id : Helper.guid()
-
-        let blockProps = props.getProps(this.id)
-        let hasShortcode = (blockProps) ? blockProps.shortcode : false
-
-        let addBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-file-add add-block"></a>`
-        let editBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-pen edit-block"></a>`
-        let removeBlockTemplate = `<a href="javascript:void(0);" data-gs-id="${this.id}" class="ico-trashcan remove-block"></a>`
-
-        let removeShorcodeTemplate = `
-            <a href="javascript:void(0);"
-                data-gs-id="${this.id}"
-                class="ico-window-delete remove-shortcode ${(hasShortcode == '') ? 'hidden' : ''}">
-            </a>
-            `
+        this.id = (id) ? id : this.getGuid()
+        this.parent = parent
 
         if(parent){
-            this.block = Helper.getBlock(parent)
+            this.block = this.getBlock(parent)
             this.grid = this.getGrid()
-
-            // disable nesting for more then 2 levels
-            addBlockTemplate = ''
         }else{
             this.grid = grid
         }
 
-        const element = `
+        this.grid.addWidget(this.getElement(), x, y, width, height, autoPosition, null, null, null, null, this.id)
+    }
+
+    getElement(){
+        return `
             <div>
                 <div class="grid-stack-item-content">
-                    <div class="controls">
-                        ${removeShorcodeTemplate}
-                        ${addBlockTemplate}
-                        ${editBlockTemplate}
-                        ${removeBlockTemplate}
-                    </div>
+                    <div class="controls">${this.getBlockControls()}</div>
                 </div>
             </div>
         `
+    }
 
-        this.grid.addWidget(element, x, y, width, height, autoPosition, null, null, null, null, this.id)
+    getBlockControls(){
+        const blockProps = props.getProps(this.id)
+        let hasShortcode = false;
+
+        if (blockProps) {
+            hasShortcode = (blockProps.shortcode == null) ? false : true
+        }
+
+        let nesting = ''
+
+        // check config if nesting is enabled
+        // disable nesting for more then 2 levels
+        if (wp.playground.nesting && !this.parent) {
+            nesting = `<a href="javascript:void(0);"
+                data-gs-id="${this.id}"
+                class="ico-file-add add-block">
+            </a>`
+        }
+
+        return `
+            ${nesting}
+
+            <a href="javascript:void(0);"
+                data-gs-id="${this.id}"
+                class="ico-window-delete remove-shortcode ${(!hasShortcode) ? 'hidden' : ''}">
+            </a>
+
+            <a href="javascript:void(0);"
+                data-gs-id="${this.id}"
+                class="ico-pen edit-block">
+            </a>
+
+            <a href="javascript:void(0);"
+                data-gs-id="${this.id}"
+                class="ico-trashcan remove-block">
+            </a>
+        `
     }
 
     getGrid(){
-        if(this.block.length){
-            if(this.block.find('.grid-stack').length){
-                return new Grid(this.block.find('.grid-stack').selector).getInstance()
-            }else{
-                let element = this.block.find('.grid-stack-item-content').append('<div class="grid-stack"></div>').find('.grid-stack').selector
-                return new Grid(element).getInstance()
-            }
+        if (this.block.find('.grid-stack').length) {
+
+            return new Grid(this.block.find('.grid-stack').selector).getInstance()
+
+        } else {
+
+            const element = this.block
+                .find('.grid-stack-item-content')
+                .append('<div class="grid-stack"></div>')
+                .find('.grid-stack')
+                .selector
+
+            return new Grid(element).getInstance()
+
         }
+    }
+
+    getBlock(id){
+        return $(`div[data-gs-id="${id}"]`)
+    }
+
+    getGuid(){
+        const randomStr = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+
+        return randomStr + randomStr
     }
 
 }

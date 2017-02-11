@@ -1,21 +1,28 @@
 <?php
 
-// TODO: refactor metabox template, and template management in general
-
 $config = array(
     'namespace' => 'todo',
     'metaboxes' => array(
         'Grid' => array(
-            'template' => 'partials/playground.php',
+            'template' => 'partials/playground',
             'position' => 'normal',
         ),
         'Grid shortcode' => array(
-            'template' => 'partials/info.php',
+            'template' => 'partials/info',
             'position' => 'side'
         )
     ),
-    'data' => 'grid-data',
-    'mce' => 'grid-builder-mce',
+    'playground' => array(
+        'data' => 'grid-data',
+        'mce' => 'grid-builder-mce',
+        'nesting' => true,
+        'grid' => 'grid-container',
+        'modal' => 'block-modal'
+    ),
+    'js_localization' => array(
+        'save' => 'Save',
+        'cancel' => 'Cancel'
+    ),
     'post_type' => array(
         'name' => 'grid',
         'icon' => 'dashicons-schedule'

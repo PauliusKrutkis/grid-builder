@@ -3,14 +3,14 @@
 <?php
 
 global $post;
-$data = $this->config['data'];
+$data = $this->playground['data'];
 wp_nonce_field($data, $data.'_nonce');
 
 ?>
 
 <button type="button" class="btn add-block"><span><?php _e('Add Block', $this->namespace) ?></span></button>
 
-<div class="grid-stack grid-container grid-stack-main"></div>
+<div class="grid-stack <?php echo $this->playground['grid'] ?>"></div>
 
 <input type="hidden"
     name="<?php echo $data ?>"
@@ -20,7 +20,7 @@ wp_nonce_field($data, $data.'_nonce');
 
 <div class="hidden"><?php wp_editor('', 'hidden_editor'); ?></div>
 
-<div class="block-modal" title="Edit block">
+<div class="<?php echo $this->playground['modal'] ?>" title="<?php _e('Edit Block', $this->namespace) ?>">
     <div class="shortcode-tree">
         <?php
         foreach($this->get() as $shortcode){

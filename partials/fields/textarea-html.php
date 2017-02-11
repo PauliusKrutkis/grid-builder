@@ -1,5 +1,5 @@
 <?php
-$editor_id = $this->config['mce'];
+$editor_id = $this->playground['mce'];
 // TODO: remove full-screen
 wp_editor(stripslashes($content), $editor_id, array('quicktags' => false));
 ?>
