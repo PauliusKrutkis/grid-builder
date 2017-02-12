@@ -1,7 +1,7 @@
 <?php
 
 $config = array(
-    'namespace' => 'todo',
+    'namespace' => 'grid-builder',
     'metaboxes' => array(
         'Grid' => array(
             'template' => 'partials/playground',
@@ -15,13 +15,17 @@ $config = array(
     'playground' => array(
         'data' => 'grid-data',
         'mce' => 'grid-builder-mce',
-        'nesting' => true,
+        'nesting' => false,
         'grid' => 'grid-container',
         'modal' => 'block-modal'
     ),
     'js_localization' => array(
         'save' => 'Save',
-        'cancel' => 'Cancel'
+        'cancel' => 'Cancel',
+        'nested' => 'Add child block',
+        'editb' => 'Edit block',
+        'removesc' => 'Remove block shortcode',
+        'deleteb' => 'Delete block'
     ),
     'post_type' => array(
         'name' => 'grid',

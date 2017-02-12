@@ -1,8 +1,75 @@
 // block modal window wrapper
 
-.block-modal-window
+div.block-modal-window
+    // z-index that's bigger then wp left and top menus
+    z-index: 99999
+    padding: 0
+    border-radius: 0
+    box-shadow: 0 1px 1px rgba(0,0,0,.04)
+    &.ui-widget-content
+        border: 1px solid $border
+    .ui-dialog-titlebar
+        background-color: transparent
+        padding: 0
+        border: 0
+        padding: 0 12px
+        border-bottom: 1px solid $line
+        border-radius: 0
+    .ui-dialog-title
+        margin: 0
+        font-size: 14px
+        font-weight: 600
+        color: $secondary
+        line-height: 36px
+    .ui-dialog-titlebar-close
+        background: transparent
+        border: 0
+        outline: 0
+        padding: 0
+        top: 50%
+        margin: 0
+        width: 36px
+        right: 0
+        color: $icon-color
+        padding: 0 5px
+        line-height: 36px
+        height: auto
+        +transform(translateY(-50%))
+        &:hover .ui-icon-closethick,
+        &:focus .ui-icon-closethick,
+        &:active .ui-icon-closethick
+            background-image: none
+            color: #fff
+            background-color: $primary
+
+    .ui-icon-closethick
+        background-image: none
+        text-indent: 0
+        margin: 0
+        left: 0
+        top: 0
+        width: auto
+        height: auto
+        &:after
+            content: "\f158"
+            padding: 0 8px
+            font: 400 20px/1 dashicons
+            speak: none
+            vertical-align: middle
+            -webkit-font-smoothing: antialiased
+            -moz-osx-font-smoothing: grayscale
+
     .ui-dialog-buttonpane
         display: none
+        padding: 10px
+        border-top: 1px solid $line-dark
+        background-color: #f5f5f5
+        .ui-dialog-buttonset
+            width: 210px
+        .ui-button
+            +button
+            width: calc(50% - 6px)
+            margin: 0 3px
     &.buttons-active
         .ui-dialog-buttonpane
             display: block
@@ -11,43 +78,76 @@
 
 .block-modal
     display: none
+    &.ui-dialog-content
+        padding: 10px
+    .fields
+        input,
+        label,
+        select
+            width: 100%
+        label
+            color: $secondary
+            font-weight: 600
+            font-size: 13px
+            margin-top: .5em
+            margin-bottom: .5em
+            display: block
+            &:first-of-type
+                margin-top: 0
+        input,
+        select
+            line-height: 19px
+
+        .wp-picker-default
+            width: auto
+        .image-container
+            margin-bottom: .5em
+            max-width: 175px
+            line-height: normal
+            img
+                max-width: 100%
+
     .shortcode-tree
         height: 100%
         width: 100%
-        +box-sizing(border-box)
+        box-sizing: border-box
         position: absolute
         left: 0
+        padding: 3px
         top: 0
         font-size: 0
         button
             height: 100%
-            width: 50%
+            width: calc(50% - 3px)
             display: inline-block
-            +box-sizing(border-box)
+            margin: 0 1.5px
+            box-sizing: border-box
             font-size: 16px
             // 1 item
             &:first-child:nth-last-child(1)
-                width: 100%
+                width: calc(100% - 3px)
 
             // 2 items
             &:first-child:nth-last-child(2),
             &:first-child:nth-last-child(2) ~ button
-                width: 50%
+                width: calc(50% - 3px)
 
             // 3 & 4 items
             &:first-child:nth-last-child(3),
             &:first-child:nth-last-child(3) ~ button,
             &:first-child:nth-last-child(4),
             &:first-child:nth-last-child(4) ~ button
-                width: 50%
+                width: calc(50% - 3px)
                 height: 50%
 
             // TODO: 5 trough 9 items
             // Maybe a for loop or something?
             &:first-child:nth-last-child(5),
             &:first-child:nth-last-child(5) ~ button
-                width: 33.3%
+                width: calc(33.3% - 3px)
                 height: 33.3%
+
+// playground
 
 #grid
     .inside
@@ -62,8 +162,6 @@
 
 .grid-container
     margin-top: 12px
-    .grid-stack
-        margin: 35px 30px
     .grid-stack-placeholder > .placeholder-content
         border: 0
         background-color: #888
@@ -83,18 +181,30 @@
         background-color: #fff
         left: 5px$i
         right: 5px$i
-        +background-cover
-        +box-shadow(0 0 2px 0 rgba(0, 0, 0, 0.75))
+        box-shadow: 0 1px 1px rgba(0,0,0,.04)
+        border: 1px solid $border
     .controls
         position: absolute
-        right: 2px
-        top: 2px
+        right: 0
+        top: 0
         font-size: 0
+        text-align: right
+        width: 100%
+        border-bottom: 1px solid $line
         a
-            border: 1px solid $primary
-            border-radius: 50%
-            margin-left: 5px
+            padding: 5px
             width: 25px
             height: 25px
             display: inline-block
             text-align: center
+            &:hover
+                color: #fff
+                background-color: $primary
+                &.remove-block
+                    background-color: $danger
+                &.edit-block
+                    background-color: $success
+                &.remove-shortcode
+                    background-color: $warning
+            &:focus
+                box-shadow: none

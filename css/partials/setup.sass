@@ -1,20 +1,5 @@
 $i: !important
 
-$admin-bar-height: 32px
-
-// screen - xs
-$mobile-min-width: 420px
-$mobile-max-width: 640px
-
-// screen - sm
-$tablet-min-width: 767px
-
-// screen - md
-$tablet-max-width: 991px
-
-// screen - lg
-$desktop-min-width: 1199px
-
 // input
 
 $input-height: 36px
@@ -26,8 +11,45 @@ $input-border-color: #ccc
 // color
 
 $primary: #0085ba
+$secondary: #23282d
+$icon-color: #666
+$line: #eee
+$line-dark: #ddd
+$border: #e5e5e5
 
-// mixins
+$danger: #a00
+$warning: #dd823b
+$success: #46b450
+
+// mixins - prefixes
+
+=appearance($opt)
+    -webkit-appearance: $opt
+    -moz-appearance: $opt
+    appearance: $opt
+
+=filter($opt)
+    -webkit-filter: $opt
+    filter: $opt
+
+=animation($opt)
+    -webkit-animation: $opt
+    animation: $opt
+
+=flex
+    display: -webkit-box
+    display: -ms-flexbox
+    display: -webkit-flex
+    display: flex
+
+=transform($opt)
+    -webkit-transform: $opt
+    -moz-transform: $opt
+    -ms-transform: $opt
+    -o-transform: $opt
+    transform: $opt
+
+// mixins - helpers
 
 =icofont
     font-family: "gbico"
@@ -42,21 +64,11 @@ $primary: #0085ba
     -moz-osx-font-smoothing: grayscale
 
 =ico
-    color: $primary
+    color: $icon-color
     font-size: 17px
     text-decoration: none
 
-=flex
-    display: -webkit-flex
-    display: -moz-flex
-    display: -ms-flex
-    display: -o-flex
-    display: flex
-
 =background-cover
-    -webkit-background-size: cover
-    -moz-background-size: cover
-    -o-background-size: cover
     background-size: cover
     background-position: center
 
@@ -69,31 +81,8 @@ $primary: #0085ba
     &:after
         clear: both
 
-=transform($opt)
-    -webkit-transform: $opt
-    -moz-transform: $opt
-    -ms-transform: $opt
-    -o-transform: $opt
-    transform: $opt
-
-=transition($opt)
-    -webkit-transition: $opt
-    -moz-transition: $opt
-    -o-transition: $opt
-    transition: $opt
-
-=box-sizing($opt)
-    -webkit-box-sizing: $opt
-    -moz-box-sizing: $opt
-    box-sizing: $opt
-
-=box-shadow($opt)
-    -webkit-box-shadow: $opt
-    -moz-box-shadow: $opt
-    box-shadow: $opt
-
 =hidden
-    display: none$i
+    display: none
 
 =vhidden
     border: 0
@@ -120,90 +109,16 @@ $primary: #0085ba
     padding: 0
     margin: 0
 
-=placeholder
-    input::-webkit-input-placeholder
-        @content
-    input:-moz-placeholder
-        @content
-    input::-moz-placeholder
-        @content
-    input:-ms-input-placeholder
-        @content
-
-=selector
-    ::-moz-selection
-        @content
-        text-shadow: none
-
-    ::selection
-        @content
-        text-shadow: none
-
-
 =sticky
     position: fixed
     top: 0
     z-index: 1
-
-
-=breakpoint($point)
-    @media screen
-        @if $point == desktop-min
-            @media(max-width: #{$desktop-min-width})
-                @content
-        @if $point == tablet-max
-            @media(max-width: #{$tablet-max-width})
-                @content
-        @if $point == tablet-min
-            @media(max-width: #{$tablet-min-width})
-                @content
-        @if $point == mobile-max
-            @media(max-width: #{$mobile-max-width})
-                @content
-        @if $point == mobile-min
-            @media(max-width: #{$mobile-min-width})
-                @content
 
 =full-width
     width: 100vw
     margin-left: -50vw
     left: 50%
     position: relative
-
-=input
-    text-decoration: none
-    display: inline-block
-    height: $input-height
-    line-height: $input-height - $input-border-width
-    outline: 0
-    width: 100%
-    vertical-align: middle
-    background-color: #fff
-    border: $input-border-width solid $input-border-color
-    border-radius: 2px
-    padding: 0 $input-height / 2
-    +transition(all .15s ease-in-out)
-
-    +breakpoint(mobile-min)
-        max-width: 100%
-
-    &:hover
-        border-color: $primary
-
-=button
-    +input
-    +transition(.2s ease-out)
-    text-align: center
-    cursor: pointer
-    span
-        display: block
-        +transition(transform .07s ease-in-out)
-    &:hover
-        background-color: lighten($primary, 60%)
-    &:focus
-        background-color: lighten($primary, 55%)
-        span
-            +transform(translateX(2px))
 
 =input-checkbox
     cursor: pointer
@@ -229,17 +144,46 @@ $primary: #0085ba
         width: $input-height / 2 - 6
         background-color: $primary
         +transform(scale(0))
-        +transition(transform .15s ease-in-out)
+        transition: transform .15s ease-in-out
     &:hover
         &:before
             border-color: $primary
 
-.hidden
-    +hidden
-
+=button
+    color: $secondary
+    text-decoration: none
+    display: inline-block
+    height: $input-height
+    line-height: $input-height - $input-border-width
+    outline: 0
+    width: 100%
+    vertical-align: middle
+    background-color: #fff
+    border: $input-border-width solid $input-border-color
+    border-radius: 2px
+    padding: 0 $input-height / 2
+    transition: all .15s ease-in-out
+    transition: .2s ease-out
+    text-align: center
+    cursor: pointer
+    span
+        display: block
+        transition: transform .07s ease-in-out
+    &:active
+        color: $secondary
+    &:hover
+        background-color: lighten($primary, 60%)
+        border-color: $primary
+    &:focus
+        background-color: lighten($primary, 55%)
+        span
+            +transform(translateX(2px))
 .btn
     +button
 
 [class^="ico-"],
 [class*=" ico-"]
     +ico
+
+.hidden
+    +vhidden

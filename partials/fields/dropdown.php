@@ -5,8 +5,9 @@ if($value):
 $assoc = (isAssoc($value)) ? true : false;
 
 ?>
+<label for="<?php echo $name ?>"><?php echo $heading ?></label>
 
-<select class="argument" name="<?php echo $name ?>">
+<select class="argument" id="<?php echo $name ?>" name="<?php echo $name ?>">
     <?php foreach($value as $key => $val):
         $selectVal = ($assoc) ? $key : $val;
         ?>

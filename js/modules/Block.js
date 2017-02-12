@@ -42,6 +42,7 @@ export default class Block{
         if (wp.playground.nesting && !this.parent) {
             nesting = `<a href="javascript:void(0);"
                 data-gs-id="${this.id}"
+                title="${wp.strings.nested}"
                 class="ico-file-add add-block">
             </a>`
         }
@@ -51,16 +52,19 @@ export default class Block{
 
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
+                title="${wp.strings.removesc}"
                 class="ico-window-delete remove-shortcode ${(!hasShortcode) ? 'hidden' : ''}">
             </a>
 
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
+                title="${wp.strings.editb}"
                 class="ico-pen edit-block">
             </a>
 
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
+                title="${wp.strings.deleteb}"
                 class="ico-trashcan remove-block">
             </a>
         `

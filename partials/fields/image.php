@@ -4,15 +4,21 @@ $saved_image = wp_get_attachment_image_src($saved, 'full');
 $image_is_saved = is_array($saved_image);
 ?>
 
+<label for="<?php echo $name ?>"><?php echo $heading ?></label>
+
 <div class="image-input-container">
     <div class="image-container">
         <?php if ($image_is_saved): ?>
-            <img src="<?php echo $saved_image[0] ?>" style="max-width:100%;" />
+            <img src="<?php echo $saved_image[0] ?>" />
         <?php endif; ?>
     </div>
-    <a href="#" class="select-image">Select</a>
-    <a href="#" class="delete-image">Delete</a>
-    <input type="text" class="argument" name="<?php echo $name ?>" value="<?php echo esc_attr($saved); ?>" />
+    <a href="javascript:void(0);" class="select-image button">
+        <?php _e('Select', $this->namespace) ?>
+    </a>
+    <a href="javascript:void(0);" class="delete-image button <?php if(!$image_is_saved) echo 'hidden' ?>">
+        <?php _e('Delete', $this->namespace) ?>
+    </a>
+    <input type="hidden" class="argument" name="<?php echo $name ?>" value="<?php echo esc_attr($saved); ?>" />
 </div>
 
 <script type="text/javascript">
@@ -33,47 +39,29 @@ addImgLink.on('click', function(event){
     }
 
     frame = wp.media({
-        title: 'Select or Upload Media Of Your Chosen Persuasion',
+        title: "<?php _e('Select or Upload Media Of Your Chosen Persuasion', $this->namespace); ?>",
         button: {
-            text: 'Use this media'
+            text: "<?php _e('Use this media', $this->namespace) ?>"
         },
         multiple: false
     });
 
     frame.on('select', function(){
-
         var attachment = frame.state().get('selection').first().toJSON();
-
-        // TODO: clean imgContainer first
-
-        imgContainer.append('<img src="'+attachment.url+'" alt="" style="max-width:100%;"/>');
-
+        imgContainer.empty()
+        imgContainer.append('<img src="'+attachment.url+'"/>');
         imgIdInput.val(attachment.id);
-
-        // Hide the add image link
-        // addImgLink.addClass( 'hidden' );
-
-        // Unhide the remove image link
-        // delImgLink.removeClass( 'hidden' );
+        delImgLink.removeClass('hidden');
     });
 
     frame.open();
 });
 
 delImgLink.on('click', function(event){
-
     event.preventDefault();
-
     imgContainer.html('');
-
-    // Un-hide the add image link
-    // addImgLink.removeClass('hidden');
-
-    // Hide the delete image link
-    // delImgLink.addClass('hidden');
-
-    // Delete the image id from the hidden input
+    delImgLink.addClass('hidden');
     imgIdInput.val('');
-
 });
+
 </script>
