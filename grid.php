@@ -25,10 +25,12 @@ class Grid
     private function _setupActions()
     {
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueue'));
+        add_action('wp_enqueue_scripts', array($this, 'frontendEnqueue'));
         add_action('init', array($this, 'addPostType'));
         add_action('add_meta_boxes', array($this, 'addMetaboxes'));
         add_action('save_post', array($this, 'saveGridData'));
         add_action('wp_ajax_get_shortcode', array($this, 'getShortcodeFields'));
+        add_shortcode($this->config['shortcode']['name'], array($this, 'addShortcode'));
     }
 
     private function _getJsLocalization()
@@ -42,6 +44,17 @@ class Grid
         }
 
         return $localization;
+    }
+
+    public function addShortcode($atts)
+    {
+        extract($atts);
+
+        ob_start();
+
+        include(plugin_dir_path( __FILE__ ) . $this->config['shortcode']['template'] . '.php');
+
+        return ob_get_clean();
     }
 
     private function get()
@@ -142,6 +155,15 @@ class Grid
         }
     }
 
+    public function frontendEnqueue()
+    {
+        wp_enqueue_script('lodash', 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js', null, null, true);
+        wp_enqueue_script('gridstack', plugins_url('js/gridstack/gridstack.min.js', __FILE__ ), array('jquery'), null, true);
+        wp_enqueue_script('grid-builder-js', plugins_url('js/frontend.js',__FILE__ ), array('jquery'), null, true);
+
+        wp_enqueue_style('grid-builder-css', plugins_url('css/partials/gridstack.min.css',__FILE__ ));
+    }
+
     public function adminEnqueue()
     {
         wp_enqueue_media();
@@ -151,7 +173,7 @@ class Grid
         wp_enqueue_style('grid-builder-css', plugins_url('css/main.css',__FILE__ ));
 
         wp_enqueue_script('jquery-ui', plugins_url('js/jquery-ui/jquery-ui.min.js', __FILE__), array('jquery'), null, true);
-        wp_enqueue_script('gridstack', plugins_url('js/gridstack/gridstack.all.js', __FILE__ ), array('jquery'), null, true);
+        wp_enqueue_script('gridstack', plugins_url('js/gridstack/gridstack.min.js', __FILE__ ), array('jquery'), null, true);
         wp_enqueue_script('grid-builder-js', plugins_url('js/build.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
 
         wp_localize_script('grid-builder-js', 'wp', array(

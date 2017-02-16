@@ -187,10 +187,10 @@ var Block = function () {
         key: 'getBlockControls',
         value: function getBlockControls() {
             var blockProps = _Props.props.getProps(this.id);
-            var hasShortcode = false;
+            var shortcodeName = false;
 
             if (blockProps) {
-                hasShortcode = blockProps.shortcode == null ? false : true;
+                shortcodeName = blockProps.shortcode == null ? false : blockProps.shortcode;
             }
 
             var nesting = '';
@@ -201,7 +201,7 @@ var Block = function () {
                 nesting = '<a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                title="' + wp.strings.nested + '"\n                class="ico-file-add add-block">\n            </a>';
             }
 
-            return '\n            ' + nesting + '\n\n            <a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                title="' + wp.strings.removesc + '"\n                class="ico-window-delete remove-shortcode ' + (!hasShortcode ? 'hidden' : '') + '">\n            </a>\n\n            <a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                title="' + wp.strings.editb + '"\n                class="ico-pen edit-block">\n            </a>\n\n            <a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                title="' + wp.strings.deleteb + '"\n                class="ico-trashcan remove-block">\n            </a>\n        ';
+            return '\n            <span class="shortcode-name">' + (shortcodeName ? shortcodeName : '') + '</span>\n\n            ' + nesting + '\n\n            <a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                title="' + wp.strings.removesc + '"\n                class="ico-window-delete remove-shortcode ' + (!shortcodeName ? 'hidden' : '') + '">\n            </a>\n\n            <a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                title="' + wp.strings.editb + '"\n                class="ico-pen edit-block">\n            </a>\n\n            <a href="javascript:void(0);"\n                data-gs-id="' + this.id + '"\n                title="' + wp.strings.deleteb + '"\n                class="ico-trashcan remove-block">\n            </a>\n        ';
         }
     }, {
         key: 'getGrid',
@@ -413,20 +413,18 @@ var Modal = function () {
             var shortcodeArgs = {};
 
             $.each(shortcodeFields, function () {
-                var vm = $(this);
-                var name = vm.attr('name');
-                var value = vm.val() ? vm.val() : null;
+                var field = $(this);
+                var name = field.attr('name');
+                var value = field.val() ? field.val() : null;
 
                 if (value != '') shortcodeArgs[name] = value;
             });
 
-            // save wysiwyg content
-
-            if (this.fields.find('#' + wp.editor_id).length) {
+            if (this.fields.find('#' + wp.playground.mce).length) {
                 var blockContentArgs = {
                     id: this.id,
                     group: 'content',
-                    value: tinymce.editors[wp.editor_id].getContent()
+                    value: tinymce.editors[wp.playground.mce].getContent()
                 };
 
                 _Props.props.saveProp(blockContentArgs);
@@ -564,17 +562,17 @@ _Events.events.on('save', function () {
     return grid.save();
 });
 _Events.events.on('shortcode-selected', function (id) {
-    return toggleRemoveShortcode(id, true);
+    return toggleShortcode(id, true);
 });
 _Events.events.on('shortcode-removed', function (id) {
-    return toggleRemoveShortcode(id, false);
+    return toggleShortcode(id, false);
 });
 
 $('body').delegate('.add-block', 'click', function () {
-    var vm = $(this);
+    var button = $(this);
 
-    new _Block2.default(null, null, 6, 3, true, null, grid.getInstance(), vm.data('gs-id'));
-    vm.blur();
+    new _Block2.default(null, null, 6, 3, true, null, grid.getInstance(), button.data('gs-id'));
+    button.blur();
 });
 
 // remove the block
@@ -602,10 +600,19 @@ $('body').delegate('.remove-shortcode', 'click', function () {
     _Events.events.emit('save');
 });
 
-function toggleRemoveShortcode(id, show) {
-    var button = $('.remove-shortcode[data-gs-id="' + id + '"]');
+function toggleShortcode(id, selected) {
+    var block = $('div[data-gs-id="' + id + '"]');
+    var name = block.find('.shortcode-name');
+    var button = block.find('.remove-shortcode');
+    var blockProps = _Props.props.getProps(id);
 
-    if (show) button.removeClass('hidden');else button.addClass('hidden');
+    if (selected) {
+        button.removeClass('hidden');
+        name.text(blockProps.shortcode);
+    } else {
+        button.addClass('hidden');
+        name.empty();
+    }
 }
 
 /***/ })

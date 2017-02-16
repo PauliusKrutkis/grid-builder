@@ -12,14 +12,14 @@ const modal = new Modal(`.${wp.playground.modal}`)
 grid.load()
 grid.getElement().on('change', () => grid.save())
 events.on('save', () => grid.save())
-events.on('shortcode-selected', (id) => toggleRemoveShortcode(id, true))
-events.on('shortcode-removed', (id) => toggleRemoveShortcode(id, false))
+events.on('shortcode-selected', (id) => toggleShortcode(id, true))
+events.on('shortcode-removed', (id) => toggleShortcode(id, false))
 
 $('body').delegate('.add-block', 'click', function(){
-    const vm = $(this)
+    const button = $(this)
 
-    new Block(null, null, 6, 3, true, null, grid.getInstance(), vm.data('gs-id'))
-    vm.blur()
+    new Block(null, null, 6, 3, true, null, grid.getInstance(), button.data('gs-id'))
+    button.blur()
 })
 
 // remove the block
@@ -47,11 +47,17 @@ $('body').delegate('.remove-shortcode', 'click', function(){
     events.emit('save')
 })
 
-function toggleRemoveShortcode(id, show) {
-    const button = $(`.remove-shortcode[data-gs-id="${id}"]`)
+function toggleShortcode(id, selected) {
+    const block = $(`div[data-gs-id="${id}"]`)
+    const name = block.find('.shortcode-name')
+    const button = block.find('.remove-shortcode')
+    const blockProps = props.getProps(id)
 
-    if(show)
+    if (selected) {
         button.removeClass('hidden')
-    else
+        name.text(blockProps.shortcode)
+    } else {
         button.addClass('hidden')
+        name.empty()
+    }
 }

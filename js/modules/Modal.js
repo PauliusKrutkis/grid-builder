@@ -35,20 +35,18 @@ export default class Modal{
         let shortcodeArgs = {}
 
         $.each(shortcodeFields, function(){
-            let vm = $(this)
-            let name = vm.attr('name')
-            let value = (vm.val()) ? vm.val() : null
+            let field = $(this)
+            let name = field.attr('name')
+            let value = (field.val()) ? field.val() : null
 
             if(value != '') shortcodeArgs[name] = value
         })
 
-        // save wysiwyg content
-
-        if(this.fields.find('#'+wp.editor_id).length){
+        if(this.fields.find('#'+wp.playground.mce).length){
             const blockContentArgs = {
                 id: this.id,
                 group: 'content',
-                value: tinymce.editors[wp.editor_id].getContent()
+                value: tinymce.editors[wp.playground.mce].getContent()
             }
 
             props.saveProp(blockContentArgs)

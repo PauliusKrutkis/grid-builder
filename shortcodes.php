@@ -52,6 +52,17 @@ $shortcodes = array(
                 'heading' => 'Lorem'
             ),
         )
+    ),
+    'example' => array(
+        'name' => 'Example',
+        'base' => 'example',
+        'params' => array(
+            array(
+                'name' => 'content',
+                'type' => 'textarea-html',
+                'heading' => 'Lorem'
+            ),
+        )
     )
 );
 

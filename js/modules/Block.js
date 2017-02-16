@@ -29,10 +29,10 @@ export default class Block{
 
     getBlockControls(){
         const blockProps = props.getProps(this.id)
-        let hasShortcode = false;
+        let shortcodeName = false;
 
         if (blockProps) {
-            hasShortcode = (blockProps.shortcode == null) ? false : true
+            shortcodeName = (blockProps.shortcode == null) ? false : blockProps.shortcode
         }
 
         let nesting = ''
@@ -48,12 +48,14 @@ export default class Block{
         }
 
         return `
+            <span class="shortcode-name">${(shortcodeName) ? shortcodeName : ''}</span>
+
             ${nesting}
 
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
                 title="${wp.strings.removesc}"
-                class="ico-window-delete remove-shortcode ${(!hasShortcode) ? 'hidden' : ''}">
+                class="ico-window-delete remove-shortcode ${(!shortcodeName) ? 'hidden' : ''}">
             </a>
 
             <a href="javascript:void(0);"

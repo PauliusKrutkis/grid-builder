@@ -33,7 +33,11 @@ $config = array(
     ),
     'field_types' => array('textfield', 'textarea-html', 'dropdown', 'colorpicker', 'image'),
     'field_params' => array('name', 'type', 'heading', 'value', 'placeholder'),
-    'shortcode_params' => array('name', 'base', 'class', 'params')
+    'shortcode_params' => array('name', 'base', 'class', 'params'),
+    'shortcode' => array(
+        'name' => 'grid',
+        'template' => 'partials/frontend'
+    )
 );
 
 return $config;
