@@ -1,0 +1,19 @@
+.grid-builder > .grid-stack-item > .grid-stack-item-content{
+    left: 5px;
+    right: 5px;
+}
+
+.gb-image{
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.gb-text p:empty{
+    display: none;
+}
+
+.gb-text p{
+    margin-top: 0;
+    margin-bottom: 10px;
+}

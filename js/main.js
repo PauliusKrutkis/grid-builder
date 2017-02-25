@@ -2,12 +2,11 @@ $ = jQuery
 
 import { events } from './modules/Events'
 import { props } from './modules/Props'
-import Block from './modules/Block'
 import Grid from './modules/Grid'
 import Modal from './modules/Modal'
 
-const grid = new Grid(`.${wp.playground.grid}`, `input[name="${wp.playground.data}"]`)
-const modal = new Modal(`.${wp.playground.modal}`)
+const grid = new Grid(`.${gb.playground.grid}`, `input[name="${gb.playground.data}"]`)
+const modal = new Modal(`.${gb.playground.modal}`)
 
 grid.load()
 grid.getElement().on('change', () => grid.save())
@@ -15,47 +14,50 @@ events.on('save', () => grid.save())
 events.on('shortcode-selected', (id) => toggleShortcode(id, true))
 events.on('shortcode-removed', (id) => toggleShortcode(id, false))
 
+// add a block
 $('body').delegate('.add-block', 'click', function(){
     const button = $(this)
-
-    new Block(null, null, 6, 3, true, null, grid.getInstance(), button.data('gs-id'))
+    grid.addBlock(button.data('gs-id'))
     button.blur()
 })
 
 // remove the block
 $('body').delegate('.remove-block', 'click', function(){
-    grid.remove($(this).data('gs-id'))
+    grid.removeBlock($(this).data('gs-id'))
 })
 
-// Prompt edit block modal
+// prompt edit block modal
 $('body').delegate('.edit-block', 'click', function(){
     modal.open($(this).data('gs-id'))
 })
 
-// Select which shortcode to add to the block
+// select which shortcode to add to the block
 $('body').delegate('.shortcode-tree button', 'click', function(){
-    modal.addShortcode($(this).data('shortcode'))
+    modal.addShortcode($(this))
 })
 
+// remove block shortcode
 $('body').delegate('.remove-shortcode', 'click', function(){
     const id = $(this).data('gs-id')
 
     props.removeProp('shortcode', id)
     props.removeProp('shortcodeArgs', id)
+    props.removeProp('shortcodeName', id)
     props.removeProp('content', id)
+
     events.emit('shortcode-removed', id)
     events.emit('save')
 })
 
 function toggleShortcode(id, selected) {
-    const block = $(`div[data-gs-id="${id}"]`)
-    const name = block.find('.shortcode-name')
-    const button = block.find('.remove-shortcode')
+    const block = grid.getBlock(id)
+    const name = block.find('.shortcode-name').first()
+    const button = block.find('.remove-shortcode').first()
     const blockProps = props.getProps(id)
 
     if (selected) {
         button.removeClass('hidden')
-        name.text(blockProps.shortcode)
+        name.text(blockProps.shortcodeName)
     } else {
         button.addClass('hidden')
         name.empty()

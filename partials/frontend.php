@@ -13,26 +13,21 @@
             data-gs-height="<?php echo $block->height ?>">
             <div class="grid-stack-item-content">
                 <?php
-
-                if(!empty((array)$block->props)){
-
+                if(isset($block->props->shortcode)){
                     $shortcodeArgs = '';
 
-                    if(!empty((array)$block->props->shortcodeArgs)){
-                        $shortcodeArgs = implode(' ', array_map(function($value, $param){
-                            return $param.'="'.$value.'"';
-                        }, (array)$block->props->shortcodeArgs, array_keys((array)$block->props->shortcodeArgs)));
-                    }
+                    $shortcodeArgs = implode(' ', array_map(function($value, $param){
+                        return $param.'="'.$value.'"';
+                    }, (array)$block->props->shortcodeArgs, array_keys((array)$block->props->shortcodeArgs)));
 
                     $content = '['.$block->props->shortcode.' '.$shortcodeArgs.']';
 
-                    if($block->props->content){
+                    if(isset($block->props->content)){
                         $content .= $block->props->content;
                         $content .= '[/'.$block->props->shortcode.']';
+
                     }
-
                     echo apply_filters('the_content', $content);
-
                 }
                 ?>
             </div>

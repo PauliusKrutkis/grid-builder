@@ -1,6 +1,6 @@
 <?php
 
-class Grid
+class Grid_Manager
 {
     static $shortcodes;
 
@@ -24,12 +24,12 @@ class Grid
 
     private function _setupActions()
     {
-        add_action('admin_enqueue_scripts', array($this, 'adminEnqueue'));
-        add_action('wp_enqueue_scripts', array($this, 'frontendEnqueue'));
         add_action('init', array($this, 'addPostType'));
         add_action('add_meta_boxes', array($this, 'addMetaboxes'));
+        add_action('admin_enqueue_scripts', array($this, 'adminEnqueue'));
         add_action('save_post', array($this, 'saveGridData'));
         add_action('wp_ajax_get_shortcode', array($this, 'getShortcodeFields'));
+        add_action('wp_enqueue_scripts', array($this, 'frontendEnqueue'));
         add_shortcode($this->config['shortcode']['name'], array($this, 'addShortcode'));
     }
 
@@ -45,6 +45,8 @@ class Grid
 
         return $localization;
     }
+
+
 
     public function addShortcode($atts)
     {
@@ -62,7 +64,7 @@ class Grid
         return self::$shortcodes;
     }
 
-    public function map($shortcode)
+    public static function map($shortcode)
     {
         self::$shortcodes[] = $shortcode;
     }
@@ -161,7 +163,8 @@ class Grid
         wp_enqueue_script('gridstack', plugins_url('js/gridstack/gridstack.min.js', __FILE__ ), array('jquery'), null, true);
         wp_enqueue_script('grid-builder-js', plugins_url('js/frontend.js',__FILE__ ), array('jquery'), null, true);
 
-        wp_enqueue_style('grid-builder-css', plugins_url('css/partials/gridstack.min.css',__FILE__ ));
+        wp_enqueue_style('gridstack', plugins_url('css/partials/gridstack.min.css',__FILE__ ));
+        wp_enqueue_style('grid-builder-css', plugins_url('css/frontend.css',__FILE__ ));
     }
 
     public function adminEnqueue()
@@ -176,7 +179,7 @@ class Grid
         wp_enqueue_script('gridstack', plugins_url('js/gridstack/gridstack.min.js', __FILE__ ), array('jquery'), null, true);
         wp_enqueue_script('grid-builder-js', plugins_url('js/build.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
 
-        wp_localize_script('grid-builder-js', 'wp', array(
+        wp_localize_script('grid-builder-js', 'gb', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'playground' => $this->playground,
             'strings' => $this->_getJsLocalization()

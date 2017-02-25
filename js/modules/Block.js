@@ -32,17 +32,17 @@ export default class Block{
         let shortcodeName = false;
 
         if (blockProps) {
-            shortcodeName = (blockProps.shortcode == null) ? false : blockProps.shortcode
+            shortcodeName = (blockProps.shortcodeName == null) ? false : blockProps.shortcodeName
         }
 
         let nesting = ''
 
         // check config if nesting is enabled
         // disable nesting for more then 2 levels
-        if (wp.playground.nesting && !this.parent) {
+        if (gb.playground.nesting && !this.parent) {
             nesting = `<a href="javascript:void(0);"
                 data-gs-id="${this.id}"
-                title="${wp.strings.nested}"
+                title="${gb.strings.nested}"
                 class="ico-file-add add-block">
             </a>`
         }
@@ -54,19 +54,19 @@ export default class Block{
 
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
-                title="${wp.strings.removesc}"
+                title="${gb.strings.removesc}"
                 class="ico-window-delete remove-shortcode ${(!shortcodeName) ? 'hidden' : ''}">
             </a>
 
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
-                title="${wp.strings.editb}"
+                title="${gb.strings.editb}"
                 class="ico-pen edit-block">
             </a>
 
             <a href="javascript:void(0);"
                 data-gs-id="${this.id}"
-                title="${wp.strings.deleteb}"
+                title="${gb.strings.deleteb}"
                 class="ico-trashcan remove-block">
             </a>
         `
@@ -88,6 +88,10 @@ export default class Block{
             return new Grid(element).getInstance()
 
         }
+    }
+
+    getSelector(){
+        return this.selector
     }
 
     getBlock(id){

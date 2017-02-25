@@ -16,11 +16,11 @@ export default class Modal{
             dialogClass: "block-modal-window",
             buttons: [
                 {
-                    text: wp.strings.save,
+                    text: gb.strings.save,
                     click: () => this.save()
                 },
                 {
-                    text: wp.strings.cancel,
+                    text: gb.strings.cancel,
                     click: () => this.close()
                 }
             ]
@@ -42,11 +42,11 @@ export default class Modal{
             if(value != '') shortcodeArgs[name] = value
         })
 
-        if(this.fields.find('#'+wp.playground.mce).length){
+        if(this.fields.find('#'+gb.playground.mce).length){
             const blockContentArgs = {
                 id: this.id,
                 group: 'content',
-                value: tinymce.editors[wp.playground.mce].getContent()
+                value: tinymce.editors[gb.playground.mce].getContent()
             }
 
             props.saveProp(blockContentArgs)
@@ -85,22 +85,29 @@ export default class Modal{
 
     // called when clicked on one of the tree items (shortcodes)
     addShortcode(shortcode){
-        const args = {
+        const base = {
             id: this.id,
             group: 'shortcode',
-            value: shortcode
+            value: shortcode.data('shortcode')
         }
 
-        props.saveProp(args)
+        const name = {
+            id: this.id,
+            group: 'shortcodeName',
+            value: shortcode.data('shortcode-name')
+        }
+
+        props.saveProp(base)
+        props.saveProp(name)
         events.emit('shortcode-selected', this.id)
-        this.edit(shortcode)
+        this.edit(shortcode.data('shortcode'))
     }
 
     edit(shortcode, args, content){
         this.shortcode = shortcode
         this.hideTree()
         $.get({
-            url: wp.ajax_url,
+            url: gb.ajax_url,
             data: {
                 action: 'get_shortcode',
                 type: shortcode,

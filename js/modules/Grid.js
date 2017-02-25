@@ -15,6 +15,7 @@ export default class Grid{
         this.element = $(element)
         this.data = $(data)
         this.grid = this.element.gridstack(this.options).data('gridstack')
+        this.blocks = []
     }
 
     getInstance(){
@@ -23,6 +24,14 @@ export default class Grid{
 
     getElement(){
         return this.element
+    }
+
+    getBlocks(id){
+        return this.blocks
+    }
+
+    getBlock(id){
+        return $(`div[data-gs-id="${id}"]`)
     }
 
     getBlockParentId(id){
@@ -34,7 +43,12 @@ export default class Grid{
         return parentGrid.parent().parent().data('gs-id')
     }
 
-    remove(id){
+    addBlock(parent, x = null, y = null, width = 6, height = 3, autoPosition = true, id = null){
+        const block = new Block(x, y, width, height, autoPosition, id, this.grid, parent)
+        this.blocks.push(block)
+    }
+
+    removeBlock(id){
         const block = this.getBlock(id)
         let instance = block.parent().gridstack(this.options).data('gridstack')
         instance.removeWidget(block)
@@ -70,11 +84,8 @@ export default class Grid{
 
         _.each(data, (node) => {
             props.storeProps(node.id, node.props)
-            new Block(node.x, node.y, node.width, node.height, false, node.id, this.grid, node.parent)
+            this.addBlock(node.parent, node.x, node.y, node.width, node.height, false, node.id)
         })
     }
 
-    getBlock(id){
-        return $(`div[data-gs-id="${id}"]`)
-    }
 }

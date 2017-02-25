@@ -5,8 +5,9 @@ jQuery(function () {
         verticalMargin: 10,
         float: true,
         animate: true,
-        staticGrid: true
+        ddPlugin: false
     }
 
     jQuery('.grid-stack').gridstack(options)
+
 });

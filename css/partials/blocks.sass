@@ -1,7 +1,7 @@
 // block modal window wrapper
 
 div.block-modal-window
-    // z-index that's bigger then wp left and top menus
+    // z-index that's equal or higher to wp left and top menus
     z-index: 99999
     padding: 0
     border-radius: 0
@@ -113,37 +113,30 @@ div.block-modal-window
         box-sizing: border-box
         position: absolute
         left: 0
-        padding: 3px
+        padding: 3px 1.5px 6px
         top: 0
         font-size: 0
         button
             height: 100%
             width: calc(50% - 3px)
             display: inline-block
-            margin: 0 1.5px
+            margin: 0 1.5px 3px
             box-sizing: border-box
             font-size: 16px
-            // 1 item
-            &:first-child:nth-last-child(1)
-                width: calc(100% - 3px)
+            width: calc(50% - 3px)
+            height: 50%
 
-            // 2 items
-            &:first-child:nth-last-child(2),
-            &:first-child:nth-last-child(2) ~ button
-                width: calc(50% - 3px)
-
-            // 3 & 4 items
-            &:first-child:nth-last-child(3),
-            &:first-child:nth-last-child(3) ~ button,
-            &:first-child:nth-last-child(4),
-            &:first-child:nth-last-child(4) ~ button
-                width: calc(50% - 3px)
-                height: 50%
-
-            // TODO: 5 trough 9 items
-            // Maybe a for loop or something?
+            // TODO: refactor
             &:first-child:nth-last-child(5),
             &:first-child:nth-last-child(5) ~ button
+            &:first-child:nth-last-child(6),
+            &:first-child:nth-last-child(6) ~ button,
+            &:first-child:nth-last-child(7),
+            &:first-child:nth-last-child(7) ~ button,
+            &:first-child:nth-last-child(8),
+            &:first-child:nth-last-child(8) ~ button,
+            &:first-child:nth-last-child(9),
+            &:first-child:nth-last-child(9) ~ button
                 width: calc(33.3% - 3px)
                 height: 33.3%
 

@@ -30,7 +30,9 @@ wp_nonce_field($data, $data.'_nonce');
                 $$paramName = (array_key_exists($paramName, $shortcode)) ? $shortcode[$paramName] : '';
             }
 
-            echo '<button type="button" class="btn '.$class.'" name="shortcode-button" data-shortcode="'.$base.'">
+            echo '<button type="button" class="btn '.$class.'" name="shortcode-button"
+                data-shortcode-name="'.$name.'"
+                data-shortcode="'.$base.'">
                 <span>'.$name.'</span>
             </button>';
         }
