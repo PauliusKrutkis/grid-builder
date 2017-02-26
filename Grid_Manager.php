@@ -108,7 +108,7 @@ class Grid_Manager
     {
         $data = $this->playground['data'];
 
-        $nonce = $_POST[$data.'_nonce'];
+        $nonce = (isset($_POST[$data.'_nonce'])) ? $_POST[$data.'_nonce'] : '';
 
         if (!isset($nonce)) return $postId;
 
