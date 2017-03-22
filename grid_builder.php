@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Grid Builder
  * Description: Grid builder plugin with gridstack.js
- * Version: 0.3.0
+ * Version: 1.0.0
  * Author: Paulius Krutkis
- * License: MIT
+ * License: GPLv2
  */
 
 if (!defined('ABSPATH')) exit;

@@ -173,11 +173,12 @@ class Grid_Manager
 
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_style('jquery-ui-css', plugins_url('js/jquery-ui/jquery-ui.min.css', __FILE__ ));
-        wp_enqueue_style('grid-builder-css', plugins_url('css/main.css',__FILE__ ));
+        wp_enqueue_style('grid-builder-icons', plugins_url('dist/gbico/styles.css',__FILE__ ));
+        wp_enqueue_style('grid-builder-css', plugins_url('dist/main.css',__FILE__ ));
 
         wp_enqueue_script('jquery-ui', plugins_url('js/jquery-ui/jquery-ui.min.js', __FILE__), array('jquery'), null, true);
         wp_enqueue_script('gridstack', plugins_url('js/gridstack/gridstack.min.js', __FILE__ ), array('jquery'), null, true);
-        wp_enqueue_script('grid-builder-js', plugins_url('js/build.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
+        wp_enqueue_script('grid-builder-js', plugins_url('dist/main.js',__FILE__ ), array('jquery', 'wp-color-picker'), null, true);
 
         wp_localize_script('grid-builder-js', 'gb', array(
             'ajax_url' => admin_url('admin-ajax.php'),

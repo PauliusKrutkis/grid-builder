@@ -1,15 +1,18 @@
 {
+  "name": "grid-builder-master",
+  "version": "1.0.0",
+  "description": "=== Plugin Name ===\r Contributors: pauliusk\r Tags: content, blocks, images, grid, block management, columns, resizable, sortable\r Requires at least: 4.6\r Tested up to: 4.7\r Stable tag: 4.3\r License: GPLv2\r License URI: https://www.gnu.org/licenses/gpl-2.0.html",
+  "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev webpack --watch",
-    "sass": "sass --watch css/main.sass --style compressed",
-    "build": "cross-env NODE_ENV=production webpack"
+    "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules",
+    "watch": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
+    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "babel-core": "^6.17.0",
-    "babel-loader": "^6.2.5",
-    "babel-preset-es2015": "^6.16.0",
-    "cross-env": "^3.1.1",
-    "webpack": "^2.1.0-beta.25",
-    "webpack-uglify-js-plugin": "^1.1.9"
+    "laravel-mix": "^0.9.1"
   }
 }
