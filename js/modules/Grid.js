@@ -5,7 +5,7 @@ export default class Grid{
 
     constructor(element, data){
         this.options = {
-            cellHeight: 80,
+            cellHeight: 40,
             verticalMargin: 10,
             float: true,
             animate: true,

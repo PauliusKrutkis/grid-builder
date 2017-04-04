@@ -1,5 +1,3 @@
-<!-- TODO: localization -->
-
 <?php
 
 global $post;

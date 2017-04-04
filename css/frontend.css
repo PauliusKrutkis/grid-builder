@@ -3,6 +3,10 @@
     right: 5px;
 }
 
+.grid-builder{
+    margin: 5px -5px;
+}
+
 .gb-image{
     height: 100%;
     background-size: cover;

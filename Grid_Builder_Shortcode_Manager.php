@@ -1,6 +1,6 @@
 <?php
 
-class Shortcode_Manager
+class Grid_Builder_Shortcode_Manager
 {
     protected $shortcodes;
 

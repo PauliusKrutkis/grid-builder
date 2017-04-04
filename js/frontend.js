@@ -1,7 +1,7 @@
 jQuery(function () {
 
     var options = {
-        cellHeight: 80,
+        cellHeight: 40,
         verticalMargin: 10,
         float: true,
         animate: true,
